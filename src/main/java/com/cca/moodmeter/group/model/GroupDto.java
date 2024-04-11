@@ -10,6 +10,7 @@ public class GroupDto {
     Long id;
     String name;
     LocalDate creationDate;
+    String creationUsername;
     LocalDate updateDate;
     String updateUsername;
 
@@ -59,6 +60,22 @@ public class GroupDto {
      */
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    /**
+     * 
+     * @return creation username
+     */
+    public String getCreationUsername() {
+        return creationUsername;
+    }
+
+    /**
+     * 
+     * @param creationUsername new value of {@link #getCreationUsername}.
+     */
+    public void setCreationUsername(String creationUsername) {
+        this.creationUsername = creationUsername;
     }
 
     /**

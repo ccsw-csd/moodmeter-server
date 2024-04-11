@@ -28,6 +28,9 @@ public class Group {
     @Column(name = "creation_date", nullable = false)
     private LocalDate creationDate;
 
+    @Column(name = "creation_username", nullable = false)
+    private String creationUsername;
+
     @Column(name = "update_date", nullable = false)
     private LocalDate updateDate;
 
@@ -80,6 +83,22 @@ public class Group {
      */
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    /**
+     * 
+     * @return creation username
+     */
+    public String getCreationUsername() {
+        return creationUsername;
+    }
+
+    /**
+     * 
+     * @param creationUsername new value of {@link #getCreationUsername}.
+     */
+    public void setCreationUsername(String creationUsername) {
+        this.creationUsername = creationUsername;
     }
 
     /**
