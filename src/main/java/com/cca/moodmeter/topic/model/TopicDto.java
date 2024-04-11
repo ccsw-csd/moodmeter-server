@@ -10,7 +10,7 @@ public class TopicDto {
 
     private Long visits;
 
-    private boolean status;
+    private Integer status;
 
     private Date creationDate;
 
@@ -44,14 +44,6 @@ public class TopicDto {
         this.visits = visits;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
     public Date getCreationDate() {
         return creationDate;
     }
@@ -82,6 +74,14 @@ public class TopicDto {
 
     public void setUpdateUsername(String updateUsername) {
         this.updateUsername = updateUsername;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
 }

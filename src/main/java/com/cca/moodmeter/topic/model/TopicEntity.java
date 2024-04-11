@@ -25,7 +25,7 @@ public class TopicEntity {
     private Long visits;
 
     @Column(name = "status")
-    private boolean status;
+    private Integer status;
 
     @Column(name = "creation_date")
     private Date creationDate;
@@ -63,14 +63,6 @@ public class TopicEntity {
         this.visits = visits;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
     public Date getCreationDate() {
         return creationDate;
     }
@@ -101,6 +93,14 @@ public class TopicEntity {
 
     public void setUpdateUsername(String updateUsername) {
         this.updateUsername = updateUsername;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
 }
