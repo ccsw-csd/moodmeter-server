@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cca.moodmeter.group.model.Group;
+import com.cca.moodmeter.group.model.GroupEntity;
 import com.cca.moodmeter.group.model.GroupDto;
 
 /**
@@ -38,9 +38,9 @@ public class GroupController {
      */
     @RequestMapping(path = "", method = RequestMethod.GET)
     public List<GroupDto> findAll() {
-        List<Group> groups = this.groupService.findAll();
+        List<GroupEntity> groupEntities = this.groupService.findAll();
 
-        return groups.stream().map(e -> mapper.map(e, GroupDto.class)).collect(Collectors.toList());
+        return groupEntities.stream().map(e -> mapper.map(e, GroupDto.class)).collect(Collectors.toList());
 
     }
 

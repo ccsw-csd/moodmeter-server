@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "`group`")
-public class Group {
+public class GroupEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,15 +2,15 @@ package com.cca.moodmeter.group;
 
 import java.util.List;
 
-import com.cca.moodmeter.group.model.Group;
+import com.cca.moodmeter.group.model.GroupEntity;
 
 public interface GroupService {
 
     /**
-     * Método para recuperar todos los {@link Group}
+     * Método para recuperar todos los {@link GroupEntity}
      *
-     * @return {@link List} de {@link Group}
+     * @return {@link List} de {@link GroupEntity}
      */
-    List<Group> findAll();
+    List<GroupEntity> findAll();
 
 }

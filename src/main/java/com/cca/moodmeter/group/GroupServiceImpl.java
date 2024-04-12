@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cca.moodmeter.group.model.Group;
+import com.cca.moodmeter.group.model.GroupEntity;
 
 /**
  * @author mguaitav
@@ -23,9 +23,9 @@ public class GroupServiceImpl implements GroupService {
      * {@inheritDoc}
      */
     @Override
-    public List<Group> findAll() {
+    public List<GroupEntity> findAll() {
 
-        return (List<Group>) this.groupRepository.findAll();
+        return (List<GroupEntity>) this.groupRepository.findAll();
     }
 
 }
