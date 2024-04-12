@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +21,6 @@ import com.cca.moodmeter.group.model.GroupDto;
 //@Tag(name = "Group", description = "API of Group List")
 @RequestMapping(value = "/group")
 @RestController
-@CrossOrigin(origins = "*")
 public class GroupController {
 
     @Autowired
