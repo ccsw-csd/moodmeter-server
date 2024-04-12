@@ -38,8 +38,6 @@ public class GroupController {
      * @param update_username   nombre de editor del grupo
      * @return {@link List} de {@link GroupDto}
      */
-    // @Operation(summary = "Find", description = "Method that return an entire
-    // list of Groups")
     @RequestMapping(path = "", method = RequestMethod.GET)
     public List<GroupDto> findAll() {
         List<Group> groups = this.groupService.findAll();
