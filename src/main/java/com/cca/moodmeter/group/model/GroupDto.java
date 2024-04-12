@@ -7,12 +7,12 @@ import java.time.LocalDate;
  */
 public class GroupDto {
 
-    Long id;
-    String name;
-    LocalDate creationDate;
-    String creationUsername;
-    LocalDate updateDate;
-    String updateUsername;
+    private Long id;
+    private String name;
+    private LocalDate creationDate;
+    private String creationUsername;
+    private LocalDate updateDate;
+    private String updateUsername;
 
     /**
      * 
