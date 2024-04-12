@@ -5,12 +5,14 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cca.moodmeter.group.model.GroupEntity;
 import com.cca.moodmeter.group.model.GroupDto;
+import com.cca.moodmeter.group.model.GroupEntity;
 
 /**
  * @author mguaitav
@@ -42,6 +44,29 @@ public class GroupController {
 
         return groupEntities.stream().map(e -> mapper.map(e, GroupDto.class)).collect(Collectors.toList());
 
+    }
+
+    /**
+     * Método para crear o actualizar un grupo
+     *
+     * @param id  PK de la entidad
+     * @param dto datos de la entidad
+     */
+    @RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT)
+    public void save(@PathVariable(name = "id", required = false) Long id, @RequestBody GroupDto dto) {
+
+        this.groupService.save(id, dto);
+    }
+
+    /**
+     * Método para borrar un grupo
+     *
+     * @param id PK de la entidad
+     */
+    @RequestMapping(path = { "/{id}" }, method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") Long id) throws Exception {
+
+        this.groupService.delete(id);
     }
 
 }
