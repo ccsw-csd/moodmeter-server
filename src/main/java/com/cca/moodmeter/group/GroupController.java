@@ -52,8 +52,6 @@ public class GroupController {
      * @param id  PK de la entidad
      * @param dto datos de la entidad
      */
-    // @Operation(summary = "Save or Update", description = "Method that saves or
-    // updates a Group")
     @RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT)
     public void save(@PathVariable(name = "id", required = false) Long id, @RequestBody GroupDto dto) {
 
