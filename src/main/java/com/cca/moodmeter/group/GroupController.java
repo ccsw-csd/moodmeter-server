@@ -18,7 +18,6 @@ import com.cca.moodmeter.group.model.GroupDto;
  * @author mguaitav
  *
  */
-//@Tag(name = "Group", description = "API of Group List")
 @RequestMapping(value = "/group")
 @RestController
 public class GroupController {
