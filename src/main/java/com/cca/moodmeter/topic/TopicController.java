@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,18 @@ public class TopicController {
 
         return topics.stream().map(e -> mapper.map(e, TopicDto.class)).collect(Collectors.toList());
 
+    }
+
+    /**
+     * Método para guardar o actualizar un topic
+     *
+     */
+    @RequestMapping(path = "/", method = RequestMethod.PUT)
+    public TopicDto save(@RequestBody TopicDto data) {
+
+        TopicEntity topic = this.topicService.save(data);
+
+        return mapper.map(topic, TopicDto.class);
     }
 
 }
