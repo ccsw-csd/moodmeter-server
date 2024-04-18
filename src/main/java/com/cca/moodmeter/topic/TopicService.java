@@ -2,7 +2,7 @@ package com.cca.moodmeter.topic;
 
 import java.util.List;
 
-import com.cca.moodmeter.topic.model.TopicDto;
+import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicEntity;
 
 public interface TopicService {
@@ -14,5 +14,5 @@ public interface TopicService {
      */
     List<TopicEntity> findAll();
 
-    TopicEntity save(TopicDto topic);
+    TopicEntity save(TopicDetail data);
 }
