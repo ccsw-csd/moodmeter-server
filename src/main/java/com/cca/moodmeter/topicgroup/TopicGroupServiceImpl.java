@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cca.moodmeter.group.model.GroupEntity;
+import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
 
 @Service
 @Transactional(readOnly = false)
@@ -16,7 +16,7 @@ public class TopicGroupServiceImpl implements TopicGroupService {
     TopicGroupRepository topicGroupRepository;
 
     @Override
-    public List<GroupEntity> findSelectedGroups(Long id) {
+    public List<TopicGroupEntity> findSelectedGroups(Long id) {
         return this.topicGroupRepository.findGroupsByTopicId(id);
     }
 

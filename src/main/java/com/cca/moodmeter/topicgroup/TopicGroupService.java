@@ -2,10 +2,10 @@ package com.cca.moodmeter.topicgroup;
 
 import java.util.List;
 
-import com.cca.moodmeter.group.model.GroupEntity;
+import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
 
 public interface TopicGroupService {
 
-    List<GroupEntity> findSelectedGroups(Long id);
+    List<TopicGroupEntity> findSelectedGroups(Long id);
 
 }

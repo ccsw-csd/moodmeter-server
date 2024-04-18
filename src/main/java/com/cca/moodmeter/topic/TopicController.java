@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
 
@@ -42,7 +43,7 @@ public class TopicController {
      *
      */
     @RequestMapping(path = "/", method = RequestMethod.PUT)
-    public TopicDto save(@RequestBody TopicDto data) {
+    public TopicDto save(@RequestBody TopicDetail data) {
 
         TopicEntity topic = this.topicService.save(data);
 

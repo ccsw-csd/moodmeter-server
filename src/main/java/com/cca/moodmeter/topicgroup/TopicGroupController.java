@@ -5,13 +5,13 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cca.moodmeter.group.model.GroupDto;
-import com.cca.moodmeter.group.model.GroupEntity;
+import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
 
 @RequestMapping(value = "/topicgroup")
 @RestController
@@ -28,12 +28,14 @@ public class TopicGroupController {
      * @return {@link List} de {@link Group}
      */
 
-    @RequestMapping(path = "/", method = RequestMethod.GET)
-    public List<GroupDto> findSelectedGroups(@RequestBody Long id) {
+    @RequestMapping(path = "", method = RequestMethod.GET)
+    public List<GroupDto> findSelectedGroups(@RequestParam Long id) {
 
-        List<GroupEntity> groups = this.topicGroupService.findSelectedGroups(id);
+        List<TopicGroupEntity> topicGroups = this.topicGroupService.findSelectedGroups(id);
 
-        return groups.stream().map(e -> mapper.map(e, GroupDto.class)).collect(Collectors.toList());
+        List<GroupDto> groups = topicGroups.stream()
+                .map(topicGroup -> mapper.map(topicGroup.getGroup(), GroupDto.class)).collect(Collectors.toList());
+        return groups;
 
     }
 
