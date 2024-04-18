@@ -1,5 +1,6 @@
 package com.cca.moodmeter.topic;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,15 +11,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cca.moodmeter.group.model.GroupDto;
 import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
+import com.cca.moodmeter.topicgroup.TopicGroupService;
+import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
 
 @RequestMapping(value = "/topic")
 @RestController
 public class TopicController {
     @Autowired
     private TopicService topicService;
+
+    @Autowired
+    private TopicGroupService topicGroupService;
 
     @Autowired
     ModelMapper mapper;
@@ -30,11 +37,23 @@ public class TopicController {
      */
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public List<TopicDto> findAll() {
+    public List<TopicDetail> findAll() {
 
+        List<TopicDetail> topicDetailList = new ArrayList<>();
         List<TopicEntity> topics = this.topicService.findAll();
+        for (TopicEntity topic : topics) {
+            List<TopicGroupEntity> topicGroups = this.topicGroupService.findSelectedGroups(topic.getId());
 
-        return topics.stream().map(e -> mapper.map(e, TopicDto.class)).collect(Collectors.toList());
+            List<GroupDto> groups = topicGroups.stream()
+                    .map(topicGroup -> mapper.map(topicGroup.getGroup(), GroupDto.class)).collect(Collectors.toList());
+
+            TopicDetail topicDetail = new TopicDetail();
+            topicDetail.setGroups(groups);
+            topicDetail.setTopic(mapper.map(topic, TopicDto.class));
+            topicDetailList.add(topicDetail);
+        }
+
+        return topicDetailList;
 
     }
 

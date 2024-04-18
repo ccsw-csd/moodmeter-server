@@ -57,7 +57,7 @@ public class TopicServiceImpl implements TopicService {
             List<GroupDto> groups = data.getGroups();
             for (GroupDto group : groups) {
                 TopicGroupEntity topicGroup = new TopicGroupEntity();
-                topicGroup.setTopic(mapper.map(data.getTopic(), TopicEntity.class));
+                topicGroup.setTopic(topic);
 
                 topicGroup.setGroup(mapper.map(group, GroupEntity.class));
 
