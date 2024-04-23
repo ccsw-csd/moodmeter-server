@@ -17,6 +17,12 @@ import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
 import com.cca.moodmeter.topicgroup.TopicGroupService;
 import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
+import com.cca.moodmeter.topicoption.TopicOptionService;
+import com.cca.moodmeter.topicoption.model.TopicOptionDto;
+import com.cca.moodmeter.topicoption.model.TopicOptionEntity;
+import com.cca.moodmeter.topicset.TopicSetService;
+import com.cca.moodmeter.topicset.model.TopicSetDto;
+import com.cca.moodmeter.topicset.model.TopicSetEntity;
 
 @RequestMapping(value = "/topic")
 @RestController
@@ -26,6 +32,12 @@ public class TopicController {
 
     @Autowired
     private TopicGroupService topicGroupService;
+
+    @Autowired
+    TopicSetService topicSetService;
+
+    @Autowired
+    TopicOptionService topicOptionService;
 
     @Autowired
     ModelMapper mapper;
@@ -41,15 +53,32 @@ public class TopicController {
 
         List<TopicDetail> topicDetailList = new ArrayList<>();
         List<TopicEntity> topics = this.topicService.findAll();
+
         for (TopicEntity topic : topics) {
             List<TopicGroupEntity> topicGroups = this.topicGroupService.findSelectedGroups(topic.getId());
 
             List<GroupDto> groups = topicGroups.stream()
                     .map(topicGroup -> mapper.map(topicGroup.getGroup(), GroupDto.class)).collect(Collectors.toList());
 
+            List<TopicSetEntity> topicSets = this.topicSetService.findByTopicId(topic.getId());
+
+            List<TopicSetDto> questions = topicSets.stream().map(e -> mapper.map(e, TopicSetDto.class))
+                    .collect(Collectors.toList());
+
             TopicDetail topicDetail = new TopicDetail();
             topicDetail.setGroups(groups);
             topicDetail.setTopic(mapper.map(topic, TopicDto.class));
+            topicDetail.setQuestions(questions);
+
+            List<List<TopicOptionDto>> options = new ArrayList<>();
+            for (TopicSetEntity set : topicSets) {
+                List<TopicOptionEntity> questionOptions = this.topicOptionService.findBySetId(set.getId());
+                List<TopicOptionDto> questionOptionsAux = questionOptions.stream()
+                        .map(e -> mapper.map(e, TopicOptionDto.class)).collect(Collectors.toList());
+                options.add(questionOptionsAux);
+            }
+
+            topicDetail.setOptions(options);
             topicDetailList.add(topicDetail);
         }
 
