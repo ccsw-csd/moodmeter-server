@@ -31,7 +31,7 @@ public class TopicOptionEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "order")
+    @Column(name = "`order`")
     private Integer order;
 
     @Column(name = "votes")

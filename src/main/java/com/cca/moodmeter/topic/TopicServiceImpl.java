@@ -14,6 +14,12 @@ import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicEntity;
 import com.cca.moodmeter.topicgroup.TopicGroupRepository;
 import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
+import com.cca.moodmeter.topicoption.TopicOptionRepository;
+import com.cca.moodmeter.topicoption.model.TopicOptionDto;
+import com.cca.moodmeter.topicoption.model.TopicOptionEntity;
+import com.cca.moodmeter.topicset.TopicSetRepository;
+import com.cca.moodmeter.topicset.model.TopicSetDto;
+import com.cca.moodmeter.topicset.model.TopicSetEntity;
 
 @Service
 @Transactional(readOnly = false)
@@ -24,6 +30,12 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     TopicGroupRepository topicGroupRepository;
+
+    @Autowired
+    TopicOptionRepository topicOptionRepository;
+
+    @Autowired
+    TopicSetRepository topicSetRepository;
 
     @Autowired
     ModelMapper mapper;
@@ -63,6 +75,48 @@ public class TopicServiceImpl implements TopicService {
 
                 this.topicGroupRepository.save(topicGroup);
             }
+        }
+
+        // Guardar o actualizar las preguntas de la encuesta
+
+        if (data.getQuestions() != null) {
+            List<TopicSetDto> questions = data.getQuestions();
+            for (TopicSetDto question : questions) {
+                TopicSetEntity topicQuestion = new TopicSetEntity();
+                topicQuestion.setOrder(question.getOrder());
+                topicQuestion.setQuestion(question.getQuestion());
+                topicQuestion.setType(question.getType());
+                topicQuestion.setTopic(mapper.map(question.getTopic(), TopicEntity.class));
+
+                if (topicQuestion.getId() != null) {
+                    topicQuestion.setId(question.getId());
+                }
+
+                this.topicSetRepository.save(topicQuestion);
+            }
+        }
+
+        // Guardar o actualizar las opciones de las preguntas de la encuesta
+
+        if (data.getOptions() != null) {
+            List<List<TopicOptionDto>> options = data.getOptions();
+            for (List<TopicOptionDto> questionOptions : options) {
+                for (TopicOptionDto option : questionOptions) {
+                    TopicOptionEntity topicOption = new TopicOptionEntity();
+                    topicOption.setImage(option.getImage());
+                    topicOption.setName(option.getName());
+                    topicOption.setOrder(option.getOrder());
+                    topicOption.setSet(mapper.map(option.getSet(), TopicSetEntity.class));
+                    topicOption.setVotes(option.getVotes());
+
+                    if (option.getId() != null) {
+                        topicOption.setId(option.getId());
+                    }
+
+                    this.topicOptionRepository.save(topicOption);
+                }
+            }
+
         }
 
         return this.topicRepository.save(topic);
