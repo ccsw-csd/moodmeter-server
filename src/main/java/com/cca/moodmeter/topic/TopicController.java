@@ -19,8 +19,6 @@ import com.cca.moodmeter.topicgroup.TopicGroupService;
 import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
 import com.cca.moodmeter.topicoption.TopicOptionService;
 import com.cca.moodmeter.topicset.TopicSetService;
-import com.cca.moodmeter.topicset.model.TopicSetDto;
-import com.cca.moodmeter.topicset.model.TopicSetEntity;
 
 @RequestMapping(value = "/topic")
 @RestController
@@ -58,15 +56,9 @@ public class TopicController {
             List<GroupDto> groups = topicGroups.stream()
                     .map(topicGroup -> mapper.map(topicGroup.getGroup(), GroupDto.class)).collect(Collectors.toList());
 
-            List<TopicSetEntity> topicSets = this.topicSetService.findByTopicId(topic.getId());
-
-            List<TopicSetDto> questions = topicSets.stream().map(e -> mapper.map(e, TopicSetDto.class))
-                    .collect(Collectors.toList());
-
             TopicDetail topicDetail = new TopicDetail();
             topicDetail.setGroups(groups);
             topicDetail.setTopic(mapper.map(topic, TopicDto.class));
-            topicDetail.setQuestions(questions);
 
             topicDetailList.add(topicDetail);
         }

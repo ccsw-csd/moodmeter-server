@@ -3,23 +3,12 @@ package com.cca.moodmeter.topic.model;
 import java.util.List;
 
 import com.cca.moodmeter.group.model.GroupDto;
-import com.cca.moodmeter.topicset.model.TopicSetDto;
 
 public class TopicDetail {
 
     private TopicDto topic;
 
     private List<GroupDto> groups;
-
-    private List<TopicSetDto> questions;
-
-    public List<TopicSetDto> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<TopicSetDto> questions) {
-        this.questions = questions;
-    }
 
     public TopicDto getTopic() {
         return topic;

@@ -1,6 +1,10 @@
 package com.cca.moodmeter.topicset.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.cca.moodmeter.topicoption.model.TopicOptionSimpleDto;
 
 public class TopicSetSimpleDto implements Serializable {
 
@@ -11,6 +15,8 @@ public class TopicSetSimpleDto implements Serializable {
     private String question;
 
     private Integer order;
+
+    private List<TopicOptionSimpleDto> options = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -42,6 +48,14 @@ public class TopicSetSimpleDto implements Serializable {
 
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public List<TopicOptionSimpleDto> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<TopicOptionSimpleDto> options) {
+        this.options = options;
     }
 
 }
