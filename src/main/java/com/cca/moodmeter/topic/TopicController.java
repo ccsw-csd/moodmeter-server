@@ -18,8 +18,6 @@ import com.cca.moodmeter.topic.model.TopicEntity;
 import com.cca.moodmeter.topicgroup.TopicGroupService;
 import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
 import com.cca.moodmeter.topicoption.TopicOptionService;
-import com.cca.moodmeter.topicoption.model.TopicOptionDto;
-import com.cca.moodmeter.topicoption.model.TopicOptionEntity;
 import com.cca.moodmeter.topicset.TopicSetService;
 import com.cca.moodmeter.topicset.model.TopicSetDto;
 import com.cca.moodmeter.topicset.model.TopicSetEntity;
@@ -70,15 +68,6 @@ public class TopicController {
             topicDetail.setTopic(mapper.map(topic, TopicDto.class));
             topicDetail.setQuestions(questions);
 
-            List<List<TopicOptionDto>> options = new ArrayList<>();
-            for (TopicSetEntity set : topicSets) {
-                List<TopicOptionEntity> questionOptions = this.topicOptionService.findBySetId(set.getId());
-                List<TopicOptionDto> questionOptionsAux = questionOptions.stream()
-                        .map(e -> mapper.map(e, TopicOptionDto.class)).collect(Collectors.toList());
-                options.add(questionOptionsAux);
-            }
-
-            topicDetail.setOptions(options);
             topicDetailList.add(topicDetail);
         }
 

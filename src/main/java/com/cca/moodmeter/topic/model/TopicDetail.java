@@ -3,7 +3,6 @@ package com.cca.moodmeter.topic.model;
 import java.util.List;
 
 import com.cca.moodmeter.group.model.GroupDto;
-import com.cca.moodmeter.topicoption.model.TopicOptionDto;
 import com.cca.moodmeter.topicset.model.TopicSetDto;
 
 public class TopicDetail {
@@ -14,22 +13,12 @@ public class TopicDetail {
 
     private List<TopicSetDto> questions;
 
-    private List<List<TopicOptionDto>> options;
-
     public List<TopicSetDto> getQuestions() {
         return questions;
     }
 
     public void setQuestions(List<TopicSetDto> questions) {
         this.questions = questions;
-    }
-
-    public List<List<TopicOptionDto>> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<List<TopicOptionDto>> options) {
-        this.options = options;
     }
 
     public TopicDto getTopic() {

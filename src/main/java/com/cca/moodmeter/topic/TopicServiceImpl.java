@@ -15,8 +15,6 @@ import com.cca.moodmeter.topic.model.TopicEntity;
 import com.cca.moodmeter.topicgroup.TopicGroupRepository;
 import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
 import com.cca.moodmeter.topicoption.TopicOptionRepository;
-import com.cca.moodmeter.topicoption.model.TopicOptionDto;
-import com.cca.moodmeter.topicoption.model.TopicOptionEntity;
 import com.cca.moodmeter.topicset.TopicSetRepository;
 import com.cca.moodmeter.topicset.model.TopicSetDto;
 import com.cca.moodmeter.topicset.model.TopicSetEntity;
@@ -94,29 +92,6 @@ public class TopicServiceImpl implements TopicService {
 
                 this.topicSetRepository.save(topicQuestion);
             }
-        }
-
-        // Guardar o actualizar las opciones de las preguntas de la encuesta
-
-        if (data.getOptions() != null) {
-            List<List<TopicOptionDto>> options = data.getOptions();
-            for (List<TopicOptionDto> questionOptions : options) {
-                for (TopicOptionDto option : questionOptions) {
-                    TopicOptionEntity topicOption = new TopicOptionEntity();
-                    topicOption.setImage(option.getImage());
-                    topicOption.setName(option.getName());
-                    topicOption.setOrder(option.getOrder());
-                    topicOption.setSet(mapper.map(option.getSet(), TopicSetEntity.class));
-                    topicOption.setVotes(option.getVotes());
-
-                    if (option.getId() != null) {
-                        topicOption.setId(option.getId());
-                    }
-
-                    this.topicOptionRepository.save(topicOption);
-                }
-            }
-
         }
 
         return this.topicRepository.save(topic);

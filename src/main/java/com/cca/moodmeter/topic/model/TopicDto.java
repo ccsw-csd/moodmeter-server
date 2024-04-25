@@ -1,6 +1,10 @@
 package com.cca.moodmeter.topic.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import com.cca.moodmeter.topicset.model.TopicSetSimpleDto;
 
 public class TopicDto {
 
@@ -19,6 +23,8 @@ public class TopicDto {
     private Date updateDate;
 
     private String updateUsername;
+
+    private List<TopicSetSimpleDto> questions = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -82,6 +88,14 @@ public class TopicDto {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public List<TopicSetSimpleDto> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<TopicSetSimpleDto> questions) {
+        this.questions = questions;
     }
 
 }
