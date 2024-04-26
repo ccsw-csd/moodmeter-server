@@ -1,7 +1,6 @@
-package com.cca.moodmeter.topicgroup.model;
+package com.cca.moodmeter.topic.model;
 
 import com.cca.moodmeter.group.model.GroupEntity;
-import com.cca.moodmeter.topic.model.TopicEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

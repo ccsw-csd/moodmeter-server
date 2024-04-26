@@ -1,7 +1,6 @@
-package com.cca.moodmeter.topicgroup.model;
+package com.cca.moodmeter.topic.model;
 
 import com.cca.moodmeter.group.model.GroupDto;
-import com.cca.moodmeter.topic.model.TopicDto;
 
 public class TopicGroupDto {
 

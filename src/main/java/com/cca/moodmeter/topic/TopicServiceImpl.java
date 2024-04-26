@@ -1,6 +1,7 @@
 package com.cca.moodmeter.topic;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,9 @@ import com.cca.moodmeter.group.model.GroupDto;
 import com.cca.moodmeter.group.model.GroupEntity;
 import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicEntity;
-import com.cca.moodmeter.topicgroup.TopicGroupRepository;
-import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
+import com.cca.moodmeter.topic.model.TopicGroupEntity;
+import com.cca.moodmeter.topic.model.TopicOptionEntity;
+import com.cca.moodmeter.topic.model.TopicSetEntity;
 
 @Service
 @Transactional(readOnly = false)
@@ -41,6 +43,7 @@ public class TopicServiceImpl implements TopicService {
         topic.setUpdateDate(data.getTopic().getUpdateDate());
         topic.setUpdateUsername(UserUtils.getUserDetails().getUsername());
         topic.setCreationDate(data.getTopic().getCreationDate());
+
         if (data.getTopic().getId() != null) {
             topic.setId(data.getTopic().getId());
             topic.setCreationUsername(data.getTopic().getCreationUsername());
@@ -63,6 +66,19 @@ public class TopicServiceImpl implements TopicService {
 
                 this.topicGroupRepository.save(topicGroup);
             }
+        }
+
+        if (data.getTopic().getQuestions() != null) {
+            List<TopicSetEntity> setList = data.getTopic().getQuestions().stream()
+                    .map(e -> mapper.map(e, TopicSetEntity.class)).collect(Collectors.toList());
+            for (TopicSetEntity set : setList) {
+                set.setTopic(topic);
+
+                for (TopicOptionEntity option : set.getOptions()) {
+                    option.setSet(set);
+                }
+            }
+            topic.setQuestions(setList);
         }
 
         return this.topicRepository.save(topic);
