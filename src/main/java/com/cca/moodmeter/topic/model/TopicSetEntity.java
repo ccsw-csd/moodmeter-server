@@ -1,10 +1,7 @@
-package com.cca.moodmeter.topicset.model;
+package com.cca.moodmeter.topic.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.cca.moodmeter.topic.model.TopicEntity;
-import com.cca.moodmeter.topicoption.model.TopicOptionEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

@@ -15,10 +15,7 @@ import com.cca.moodmeter.group.model.GroupDto;
 import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
-import com.cca.moodmeter.topicgroup.TopicGroupService;
-import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
-import com.cca.moodmeter.topicoption.TopicOptionService;
-import com.cca.moodmeter.topicset.TopicSetService;
+import com.cca.moodmeter.topic.model.TopicGroupEntity;
 
 @RequestMapping(value = "/topic")
 @RestController
@@ -28,12 +25,6 @@ public class TopicController {
 
     @Autowired
     private TopicGroupService topicGroupService;
-
-    @Autowired
-    TopicSetService topicSetService;
-
-    @Autowired
-    TopicOptionService topicOptionService;
 
     @Autowired
     ModelMapper mapper;

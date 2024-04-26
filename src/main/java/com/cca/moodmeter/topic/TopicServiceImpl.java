@@ -13,12 +13,9 @@ import com.cca.moodmeter.group.model.GroupDto;
 import com.cca.moodmeter.group.model.GroupEntity;
 import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicEntity;
-import com.cca.moodmeter.topicgroup.TopicGroupRepository;
-import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
-import com.cca.moodmeter.topicoption.TopicOptionRepository;
-import com.cca.moodmeter.topicoption.model.TopicOptionEntity;
-import com.cca.moodmeter.topicset.TopicSetRepository;
-import com.cca.moodmeter.topicset.model.TopicSetEntity;
+import com.cca.moodmeter.topic.model.TopicGroupEntity;
+import com.cca.moodmeter.topic.model.TopicOptionEntity;
+import com.cca.moodmeter.topic.model.TopicSetEntity;
 
 @Service
 @Transactional(readOnly = false)
@@ -29,12 +26,6 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     TopicGroupRepository topicGroupRepository;
-
-    @Autowired
-    TopicOptionRepository topicOptionRepository;
-
-    @Autowired
-    TopicSetRepository topicSetRepository;
 
     @Autowired
     ModelMapper mapper;

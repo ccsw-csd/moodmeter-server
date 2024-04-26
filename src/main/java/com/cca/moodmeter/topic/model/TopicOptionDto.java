@@ -1,6 +1,4 @@
-package com.cca.moodmeter.topicoption.model;
-
-import com.cca.moodmeter.topicset.model.TopicSetDto;
+package com.cca.moodmeter.topic.model;
 
 public class TopicOptionDto {
 

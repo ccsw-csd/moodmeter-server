@@ -1,6 +1,4 @@
-package com.cca.moodmeter.topicoption.model;
-
-import com.cca.moodmeter.topicset.model.TopicSetEntity;
+package com.cca.moodmeter.topic.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

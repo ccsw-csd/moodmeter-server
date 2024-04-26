@@ -1,10 +1,10 @@
-package com.cca.moodmeter.topicgroup;
+package com.cca.moodmeter.topic;
 
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
+import com.cca.moodmeter.topic.model.TopicGroupEntity;
 
 public interface TopicGroupRepository extends CrudRepository<TopicGroupEntity, Long> {
 

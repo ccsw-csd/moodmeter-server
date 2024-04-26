@@ -1,4 +1,4 @@
-package com.cca.moodmeter.topicoption.model;
+package com.cca.moodmeter.topic.model;
 
 import java.io.Serializable;
 

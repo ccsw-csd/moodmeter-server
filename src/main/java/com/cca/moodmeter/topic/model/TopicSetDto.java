@@ -1,14 +1,13 @@
-package com.cca.moodmeter.topicset.model;
+package com.cca.moodmeter.topic.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cca.moodmeter.topicoption.model.TopicOptionSimpleDto;
-
-public class TopicSetSimpleDto implements Serializable {
+public class TopicSetDto {
 
     private Long id;
+
+    private TopicEntity topic;
 
     private String type;
 
@@ -24,6 +23,14 @@ public class TopicSetSimpleDto implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public TopicEntity getTopic() {
+        return topic;
+    }
+
+    public void setTopic(TopicEntity topic) {
+        this.topic = topic;
     }
 
     public String getType() {
