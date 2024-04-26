@@ -1,6 +1,7 @@
 package com.cca.moodmeter.topic;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,9 @@ import com.cca.moodmeter.topic.model.TopicEntity;
 import com.cca.moodmeter.topicgroup.TopicGroupRepository;
 import com.cca.moodmeter.topicgroup.model.TopicGroupEntity;
 import com.cca.moodmeter.topicoption.TopicOptionRepository;
+import com.cca.moodmeter.topicoption.model.TopicOptionEntity;
 import com.cca.moodmeter.topicset.TopicSetRepository;
+import com.cca.moodmeter.topicset.model.TopicSetEntity;
 
 @Service
 @Transactional(readOnly = false)
@@ -49,6 +52,7 @@ public class TopicServiceImpl implements TopicService {
         topic.setUpdateDate(data.getTopic().getUpdateDate());
         topic.setUpdateUsername(UserUtils.getUserDetails().getUsername());
         topic.setCreationDate(data.getTopic().getCreationDate());
+
         if (data.getTopic().getId() != null) {
             topic.setId(data.getTopic().getId());
             topic.setCreationUsername(data.getTopic().getCreationUsername());
@@ -73,20 +77,19 @@ public class TopicServiceImpl implements TopicService {
             }
         }
 
-        // Guardar o actualizar las preguntas de la encuesta
-        /*
-         * if (data.getQuestions() != null) { List<TopicSetDto> questions =
-         * data.getQuestions(); for (TopicSetDto question : questions) { TopicSetEntity
-         * topicQuestion = new TopicSetEntity();
-         * topicQuestion.setOrder(question.getOrder());
-         * topicQuestion.setQuestion(question.getQuestion());
-         * topicQuestion.setType(question.getType());
-         * topicQuestion.setTopic(mapper.map(question.getTopic(), TopicEntity.class));
-         * 
-         * if (topicQuestion.getId() != null) { topicQuestion.setId(question.getId()); }
-         * 
-         * this.topicSetRepository.save(topicQuestion); } }
-         */
+        if (data.getTopic().getQuestions() != null) {
+            List<TopicSetEntity> setList = data.getTopic().getQuestions().stream()
+                    .map(e -> mapper.map(e, TopicSetEntity.class)).collect(Collectors.toList());
+            for (TopicSetEntity set : setList) {
+                set.setTopic(topic);
+
+                for (TopicOptionEntity option : set.getOptions()) {
+                    option.setSet(set);
+                }
+            }
+            topic.setQuestions(setList);
+        }
+
         return this.topicRepository.save(topic);
     }
 
