@@ -1,6 +1,7 @@
 package com.cca.moodmeter.topic;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,8 @@ import com.cca.moodmeter.topic.model.TopicEntity;
 import com.cca.moodmeter.topic.model.TopicGroupEntity;
 import com.cca.moodmeter.topic.model.TopicOptionEntity;
 import com.cca.moodmeter.topic.model.TopicSetEntity;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 @Transactional(readOnly = false)
@@ -82,6 +85,25 @@ public class TopicServiceImpl implements TopicService {
         }
 
         return this.topicRepository.save(topic);
+    }
+
+    @Override
+    public TopicEntity addVisit(Long id) {
+        Optional<TopicEntity> topicOptional = this.topicRepository.findById(id);
+
+        if (topicOptional.isPresent()) {
+            TopicEntity topic = topicOptional.get();
+            Long visits = topic.getVisits() + 1;
+            topic.setVisits(visits);
+            try {
+                // return this.topicRepository.save(topic);
+                return topic;
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to save topic", e);
+            }
+        } else {
+            throw new EntityNotFoundException("Topic with ID " + id + " not found");
+        }
     }
 
 }

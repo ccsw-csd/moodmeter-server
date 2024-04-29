@@ -15,4 +15,6 @@ public interface TopicService {
     List<TopicEntity> findAll();
 
     TopicEntity save(TopicDetail data);
+
+    TopicEntity addVisit(Long id);
 }

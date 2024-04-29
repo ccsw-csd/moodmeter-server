@@ -70,4 +70,16 @@ public class TopicController {
         return mapper.map(topic, TopicDto.class);
     }
 
+    /**
+     * Método para aumentar el número de visitas de la encuesta
+     *
+     */
+    @RequestMapping(path = "/visits", method = RequestMethod.PUT)
+    public TopicDto save(@RequestBody Long id) {
+
+        TopicEntity topic = this.topicService.addVisit(id);
+
+        return mapper.map(topic, TopicDto.class);
+    }
+
 }
