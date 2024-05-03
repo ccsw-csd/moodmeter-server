@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cca.moodmeter.config.security.UserUtils;
 import com.cca.moodmeter.person.model.PersonEntity;
 
 @Service
@@ -20,6 +21,14 @@ public class PersonServiceImpl implements PersonService {
     public List<PersonEntity> findByFilter(String matchUsernameNameLastname) {
 
         return (List<PersonEntity>) this.personRepository.findUsersLikeFilter(matchUsernameNameLastname);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PersonEntity getPersonInWeb() {
+        return personRepository.getPersonByName(UserUtils.getUserDetails().getUsername());
     }
 
 }

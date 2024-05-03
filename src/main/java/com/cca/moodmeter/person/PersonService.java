@@ -14,4 +14,11 @@ public interface PersonService {
      */
     List<PersonEntity> findByFilter(String matchUsernameNameLastname);
 
+    /**
+     * Método para recuperar el usuario que está usando la web en este momento
+     * 
+     * @return
+     */
+    PersonEntity getPersonInWeb();
+
 }

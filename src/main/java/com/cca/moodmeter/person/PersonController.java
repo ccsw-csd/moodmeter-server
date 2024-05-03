@@ -26,6 +26,13 @@ public class PersonController {
     @Autowired
     ModelMapper mapper;
 
+    /**
+     * Método para encontrar usuarios cuyo nombre, apellido o username tenga el
+     * parámetro de filtrado
+     * 
+     * @param matchUsernameNameLastname
+     * @return
+     */
     @RequestMapping(path = "/{matchUsernameNameLastname}", method = RequestMethod.GET)
     public List<PersonDto> findByFilter(
             @PathVariable(name = "matchUsernameNameLastname") String matchUsernameNameLastname) {
@@ -33,5 +40,15 @@ public class PersonController {
         List<PersonEntity> personEntities = this.personService.findByFilter(matchUsernameNameLastname);
 
         return personEntities.stream().map(e -> mapper.map(e, PersonDto.class)).collect(Collectors.toList());
+    }
+
+    /**
+     * Metodo que devuelve la persona que está utilizando la web en la sesión
+     * 
+     * @return PersonEntity
+     */
+    @RequestMapping(path = "/personInWeb", method = RequestMethod.GET)
+    public PersonEntity getPersonInWeb() {
+        return personService.getPersonInWeb();
     }
 }

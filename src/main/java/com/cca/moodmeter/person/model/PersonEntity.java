@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
  * 
  */
 @Entity
-@Table(name = "person.all_person")
+@Table(name = "all_person", catalog = "personal")
 public class PersonEntity {
 
     @Id
