@@ -19,5 +19,5 @@ public interface TopicService {
 
     TopicEntity addVisit(Long id);
 
-    TopicEntity saveVote(TopicDto data);
+    void saveVote(TopicDto data);
 }

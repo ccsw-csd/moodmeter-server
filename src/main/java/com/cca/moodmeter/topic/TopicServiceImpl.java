@@ -121,15 +121,14 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public TopicEntity saveVote(TopicDto data) {
-
-        TopicEntity topic = new TopicEntity();
+    public void saveVote(TopicDto data) {
 
         if (data.getStatus() == 1) {
             String user = UserUtils.getUserDetails().getUsername();
-            PersonEntity person = personRepository.findByUsernameAndActive(user);
+            PersonEntity person = personRepository.findByUsernameAndActiveTrue(user);
+            Integer personId = person.getId();
 
-            boolean hasVoted = topicVotedByRepository.existsByTopicIdAndUsername(data.getId(), user);
+            boolean hasVoted = topicVotedByRepository.existsByTopicIdAndPersonId(data.getId(), personId);
             if (!hasVoted) {
                 // Recorro todas las preguntas de la encuesta
                 for (TopicSetSimpleDto question : data.getQuestions()) {
@@ -143,14 +142,16 @@ public class TopicServiceImpl implements TopicService {
                                 Optional<TopicOptionEntity> optionOptional = this.topicOptionRepository
                                         .findById(optionId);
                                 if (optionOptional.isPresent()) {
-                                    TopicOptionEntity opt = optionOptional.get();
-                                    opt.setVotes(opt.getVotes() + 1);
-                                    this.topicOptionRepository.save(opt);
+                                    TopicOptionEntity topicOption = optionOptional.get();
+                                    topicOption.setVotes(topicOption.getVotes() + 1);
+                                    this.topicOptionRepository.save(topicOption);
                                 }
                             }
                         }
                     }
                 }
+
+                TopicEntity topic = new TopicEntity();
 
                 topic.setId(data.getId());
 
@@ -163,7 +164,6 @@ public class TopicServiceImpl implements TopicService {
 
         }
 
-        return topic;
     }
 
 }

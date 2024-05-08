@@ -15,9 +15,6 @@ public class PersonEntity {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "saga", nullable = false)
-    private String saga;
-
     @Column(name = "username", nullable = false)
     private String username;
 
@@ -30,38 +27,8 @@ public class PersonEntity {
     @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @Column(name = "center")
-    private String center;
-
-    @Column(name = "grade")
-    private String grade;
-
-    @Column(name = "businesscode")
-    private String businesscode;
-
-    @Column(name = "pucode")
-    private String pucode;
-
-    @Column(name = "startdate")
-    private String startDate;
-
-    @Column(name = "jobrole")
-    private String jobRole;
-
-    @Column(name = "entity_ldap")
-    private boolean entity_Ldap;
-
-    @Column(name = "global_employee_id")
-    private String globalEmployeeId;
-
-    @Column(name = "location")
-    private String location;
-
     @Column(name = "active", nullable = false)
     private Integer active;
-
-    @Column(name = "enddate")
-    private String endDate;
 
     /**
      * @return id
@@ -77,22 +44,6 @@ public class PersonEntity {
     public void setId(Integer id) {
 
         this.id = id;
-    }
-
-    /**
-     * @return saga
-     */
-    public String getSaga() {
-
-        return this.saga;
-    }
-
-    /**
-     * @param saga new value of {@link #getsaga}.
-     */
-    public void setSaga(String saga) {
-
-        this.saga = saga;
     }
 
     /**
@@ -160,38 +111,6 @@ public class PersonEntity {
     }
 
     /**
-     * @return center
-     */
-    public String getCenter() {
-
-        return this.center;
-    }
-
-    /**
-     * @param centeId new value of {@link #getcenter}.
-     */
-    public void setCenter(String center) {
-
-        this.center = center;
-    }
-
-    /**
-     * @return businesscode
-     */
-    public String getBusinesscode() {
-
-        return this.businesscode;
-    }
-
-    /**
-     * @param businesscode new value of {@link #getbusinesscode}.
-     */
-    public void setBusinesscode(String businesscode) {
-
-        this.businesscode = businesscode;
-    }
-
-    /**
      * @return active
      */
     public Integer getActive() {
@@ -205,72 +124,6 @@ public class PersonEntity {
     public void setActive(Integer active) {
 
         this.active = active;
-    }
-
-    public String getGrade() {
-
-        return grade;
-    }
-
-    public void setGrade(String grade) {
-
-        this.grade = grade;
-    }
-
-    public String getGlobalEmployeeId() {
-        return globalEmployeeId;
-    }
-
-    public void setGlobalEmployeeId(String globalEmployeeId) {
-        this.globalEmployeeId = globalEmployeeId;
-    }
-
-    public String getPucode() {
-        return pucode;
-    }
-
-    public void setPucode(String pucode) {
-        this.pucode = pucode;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getJobRole() {
-        return jobRole;
-    }
-
-    public void setJobRole(String jobRole) {
-        this.jobRole = jobRole;
-    }
-
-    public boolean isEntity_Ldap() {
-        return entity_Ldap;
-    }
-
-    public void setEntity_Ldap(boolean entity_Ldap) {
-        this.entity_Ldap = entity_Ldap;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
     }
 
 }
