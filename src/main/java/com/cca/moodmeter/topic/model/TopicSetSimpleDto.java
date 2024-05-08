@@ -16,6 +16,8 @@ public class TopicSetSimpleDto implements Serializable {
 
     private List<TopicOptionSimpleDto> options = new ArrayList<>();
 
+    private List<Long> answers = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -54,6 +56,14 @@ public class TopicSetSimpleDto implements Serializable {
 
     public void setOptions(List<TopicOptionSimpleDto> options) {
         this.options = options;
+    }
+
+    public List<Long> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Long> answers) {
+        this.answers = answers;
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,6 +69,29 @@ public class TopicController {
         TopicEntity topic = this.topicService.save(data);
 
         return mapper.map(topic, TopicDto.class);
+    }
+
+    /**
+     * Método para aumentar el número de visitas de la encuesta
+     *
+     */
+    @RequestMapping(path = "/{id}/visit", method = RequestMethod.PUT)
+    public TopicDto save(@PathVariable Long id) {
+
+        TopicEntity topic = this.topicService.addVisit(id);
+
+        return mapper.map(topic, TopicDto.class);
+    }
+
+    /**
+     * Método para guardar votos de una encuesta
+     *
+     */
+    @RequestMapping(path = "/vote", method = RequestMethod.PUT)
+    public void vote(@RequestBody TopicDto data) {
+
+        this.topicService.saveVote(data);
+
     }
 
 }

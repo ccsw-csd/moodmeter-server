@@ -1,6 +1,7 @@
 package com.cca.moodmeter.topic;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -11,11 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cca.moodmeter.config.security.UserUtils;
 import com.cca.moodmeter.group.model.GroupDto;
 import com.cca.moodmeter.group.model.GroupEntity;
+import com.cca.moodmeter.person.PersonRepository;
+import com.cca.moodmeter.person.model.PersonEntity;
 import com.cca.moodmeter.topic.model.TopicDetail;
+import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
 import com.cca.moodmeter.topic.model.TopicGroupEntity;
 import com.cca.moodmeter.topic.model.TopicOptionEntity;
+import com.cca.moodmeter.topic.model.TopicOptionSimpleDto;
 import com.cca.moodmeter.topic.model.TopicSetEntity;
+import com.cca.moodmeter.topic.model.TopicSetSimpleDto;
+import com.cca.moodmeter.topic.model.TopicVotedByEntity;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 @Transactional(readOnly = false)
@@ -26,6 +35,15 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     TopicGroupRepository topicGroupRepository;
+
+    @Autowired
+    PersonRepository personRepository;
+
+    @Autowired
+    TopicVotedByRepository topicVotedByRepository;
+
+    @Autowired
+    TopicOptionRepository topicOptionRepository;
 
     @Autowired
     ModelMapper mapper;
@@ -82,6 +100,70 @@ public class TopicServiceImpl implements TopicService {
         }
 
         return this.topicRepository.save(topic);
+    }
+
+    @Override
+    public TopicEntity addVisit(Long id) {
+        Optional<TopicEntity> topicOptional = this.topicRepository.findById(id);
+
+        if (topicOptional.isPresent()) {
+            TopicEntity topic = topicOptional.get();
+            Long visits = topic.getVisits() + 1;
+            topic.setVisits(visits);
+            try {
+                return this.topicRepository.save(topic);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to save topic", e);
+            }
+        } else {
+            throw new EntityNotFoundException("Topic with ID " + id + " not found");
+        }
+    }
+
+    @Override
+    public void saveVote(TopicDto data) {
+
+        if (data.getStatus() == 1) {
+            String user = UserUtils.getUserDetails().getUsername();
+            PersonEntity person = personRepository.findByUsernameAndActiveTrue(user);
+            Integer personId = person.getId();
+
+            boolean hasVoted = topicVotedByRepository.existsByTopicIdAndPersonId(data.getId(), personId);
+            if (!hasVoted) {
+                // Recorro todas las preguntas de la encuesta
+                for (TopicSetSimpleDto question : data.getQuestions()) {
+                    // Recorro las opciones votadas para cada pregunta
+                    for (Long optionId : question.getAnswers()) {
+                        // Recorro las opciones para cada pregunta y sumo uno a los votos que
+                        // correspondan
+                        for (TopicOptionSimpleDto option : question.getOptions()) {
+                            if (option.getId() == optionId) {
+                                // option.setVotes(option.getVotes() + 1);
+                                Optional<TopicOptionEntity> optionOptional = this.topicOptionRepository
+                                        .findById(optionId);
+                                if (optionOptional.isPresent()) {
+                                    TopicOptionEntity topicOption = optionOptional.get();
+                                    topicOption.setVotes(topicOption.getVotes() + 1);
+                                    this.topicOptionRepository.save(topicOption);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                TopicEntity topic = new TopicEntity();
+
+                topic.setId(data.getId());
+
+                TopicVotedByEntity voted = new TopicVotedByEntity();
+                voted.setPerson(person);
+                voted.setTopic(topic);
+                this.topicVotedByRepository.save(voted);
+
+            }
+
+        }
+
     }
 
 }
