@@ -82,4 +82,16 @@ public class TopicController {
         return mapper.map(topic, TopicDto.class);
     }
 
+    /**
+     * Método para guardar votos de una encuesta
+     *
+     */
+    @RequestMapping(path = "/vote", method = RequestMethod.PUT)
+    public TopicDto vote(@RequestBody TopicDto data) {
+
+        TopicEntity topic = this.topicService.saveVote(data);
+
+        return mapper.map(topic, TopicDto.class);
+    }
+
 }

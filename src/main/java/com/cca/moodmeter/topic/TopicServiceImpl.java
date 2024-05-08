@@ -12,11 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cca.moodmeter.config.security.UserUtils;
 import com.cca.moodmeter.group.model.GroupDto;
 import com.cca.moodmeter.group.model.GroupEntity;
+import com.cca.moodmeter.person.PersonRepository;
+import com.cca.moodmeter.person.model.PersonEntity;
 import com.cca.moodmeter.topic.model.TopicDetail;
+import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
 import com.cca.moodmeter.topic.model.TopicGroupEntity;
 import com.cca.moodmeter.topic.model.TopicOptionEntity;
+import com.cca.moodmeter.topic.model.TopicOptionSimpleDto;
 import com.cca.moodmeter.topic.model.TopicSetEntity;
+import com.cca.moodmeter.topic.model.TopicSetSimpleDto;
+import com.cca.moodmeter.topic.model.TopicVotedByEntity;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -29,6 +35,15 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     TopicGroupRepository topicGroupRepository;
+
+    @Autowired
+    PersonRepository personRepository;
+
+    @Autowired
+    TopicVotedByRepository topicVotedByRepository;
+
+    @Autowired
+    TopicOptionRepository topicOptionRepository;
 
     @Autowired
     ModelMapper mapper;
@@ -96,14 +111,59 @@ public class TopicServiceImpl implements TopicService {
             Long visits = topic.getVisits() + 1;
             topic.setVisits(visits);
             try {
-                // return this.topicRepository.save(topic);
-                return topic;
+                return this.topicRepository.save(topic);
             } catch (Exception e) {
                 throw new RuntimeException("Failed to save topic", e);
             }
         } else {
             throw new EntityNotFoundException("Topic with ID " + id + " not found");
         }
+    }
+
+    @Override
+    public TopicEntity saveVote(TopicDto data) {
+
+        TopicEntity topic = new TopicEntity();
+
+        if (data.getStatus() == 1) {
+            String user = UserUtils.getUserDetails().getUsername();
+            PersonEntity person = personRepository.findByUsernameAndActive(user);
+
+            boolean hasVoted = topicVotedByRepository.existsByTopicIdAndUsername(data.getId(), user);
+            if (!hasVoted) {
+                // Recorro todas las preguntas de la encuesta
+                for (TopicSetSimpleDto question : data.getQuestions()) {
+                    // Recorro las opciones votadas para cada pregunta
+                    for (Long optionId : question.getAnswers()) {
+                        // Recorro las opciones para cada pregunta y sumo uno a los votos que
+                        // correspondan
+                        for (TopicOptionSimpleDto option : question.getOptions()) {
+                            if (option.getId() == optionId) {
+                                // option.setVotes(option.getVotes() + 1);
+                                Optional<TopicOptionEntity> optionOptional = this.topicOptionRepository
+                                        .findById(optionId);
+                                if (optionOptional.isPresent()) {
+                                    TopicOptionEntity opt = optionOptional.get();
+                                    opt.setVotes(opt.getVotes() + 1);
+                                    this.topicOptionRepository.save(opt);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                topic.setId(data.getId());
+
+                TopicVotedByEntity voted = new TopicVotedByEntity();
+                voted.setPerson(person);
+                voted.setTopic(topic);
+                this.topicVotedByRepository.save(voted);
+
+            }
+
+        }
+
+        return topic;
     }
 
 }

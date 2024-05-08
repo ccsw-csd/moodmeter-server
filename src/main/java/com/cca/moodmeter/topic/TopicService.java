@@ -3,6 +3,7 @@ package com.cca.moodmeter.topic;
 import java.util.List;
 
 import com.cca.moodmeter.topic.model.TopicDetail;
+import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
 
 public interface TopicService {
@@ -17,4 +18,6 @@ public interface TopicService {
     TopicEntity save(TopicDetail data);
 
     TopicEntity addVisit(Long id);
+
+    TopicEntity saveVote(TopicDto data);
 }
