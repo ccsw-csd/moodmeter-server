@@ -15,10 +15,11 @@ public interface PersonService {
     List<PersonEntity> findByFilter(String matchUsernameNameLastname);
 
     /**
-     * Método para recuperar el usuario que está usando la web en este momento
+     * Devuelve la persona con el username como parámetro
      * 
+     * @param username
      * @return
      */
-    PersonEntity getPersonInWeb();
+    public PersonEntity getPersonByName(String username);
 
 }

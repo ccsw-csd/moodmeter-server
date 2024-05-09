@@ -2,37 +2,37 @@ package com.cca.moodmeter.group.model;
 
 import java.util.List;
 
-import com.cca.moodmeter.person.model.PersonEntity;
+import com.cca.moodmeter.person.model.PersonDto;
 
 /**
  * @author mguaitav
  */
 public class GroupEditDto {
-    private GroupEntity group;
-    private List<PersonEntity> collaborators;
-    private List<PersonEntity> admins;
+    private GroupDto group;
+    private List<PersonDto> collaborators;
+    private List<PersonDto> admins;
 
-    public GroupEntity getGroup() {
+    public GroupDto getGroup() {
         return group;
     }
 
-    public void setGroup(GroupEntity group) {
+    public void setGroup(GroupDto group) {
         this.group = group;
     }
 
-    public List<PersonEntity> getCollaborators() {
+    public List<PersonDto> getCollaborators() {
         return collaborators;
     }
 
-    public void setCollaborators(List<PersonEntity> collaborators) {
+    public void setCollaborators(List<PersonDto> collaborators) {
         this.collaborators = collaborators;
     }
 
-    public List<PersonEntity> getAdmins() {
+    public List<PersonDto> getAdmins() {
         return admins;
     }
 
-    public void setAdmin(List<PersonEntity> admins) {
+    public void setAdmin(List<PersonDto> admins) {
         this.admins = admins;
     }
 

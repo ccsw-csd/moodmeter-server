@@ -1,10 +1,14 @@
-package com.cca.moodmeter.groupAdmin.model;
+package com.cca.moodmeter.group.model;
+
+import com.cca.moodmeter.person.model.PersonEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -20,11 +24,13 @@ public class GroupAdminEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "group_id", nullable = false)
-    private Long groupId;
+    @ManyToOne
+    @JoinColumn(name = "group_id", nullable = false)
+    private GroupEntity group;
 
-    @Column(name = "person_id", nullable = false)
-    private Long personId;
+    @ManyToOne
+    @JoinColumn(name = "person_id", nullable = false)
+    private PersonEntity person;
 
     /**
      * @return id
@@ -43,33 +49,33 @@ public class GroupAdminEntity {
 
     /**
      * 
-     * @return groupId
+     * @return group
      */
-    public Long getGroupId() {
-        return groupId;
+    public GroupEntity getGroup() {
+        return group;
     }
 
     /**
      * 
-     * @param groupId new value of {@link #getGroupId}.
+     * @param group new value of {@link #getGroup}.
      */
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+    public void setGroup(GroupEntity group) {
+        this.group = group;
     }
 
     /**
      * 
-     * @return personId
+     * @return person
      */
-    public Long getPersonId() {
-        return personId;
+    public PersonEntity getPerson() {
+        return person;
     }
 
     /**
      * 
-     * @param personId new value of {@link #getPersonId}.
+     * @param person new value of {@link #getPerson}.
      */
-    public void setPersonId(Long personId) {
-        this.personId = personId;
+    public void setPerson(PersonEntity person) {
+        this.person = person;
     }
 }

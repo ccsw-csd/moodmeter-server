@@ -1,10 +1,9 @@
-package com.cca.moodmeter.group;
+package com.cca.moodmeter.group.service;
 
 import java.util.List;
 
 import com.cca.moodmeter.group.model.GroupEditDto;
 import com.cca.moodmeter.group.model.GroupEntity;
-import com.cca.moodmeter.person.model.PersonEntity;
 
 public interface GroupService {
 
@@ -23,13 +22,6 @@ public interface GroupService {
     void delete(Long id) throws Exception;
 
     /**
-     * Método para buscar {@link PersonEntity} con filtro
-     * 
-     * @param nameLastnameUsername string para filtrado
-     */
-    List<PersonEntity> searchByNameLastnameUsername(String nameLastnameUsername) throws Exception;
-
-    /**
      * Método para devolver un GroupEditDto para guardar
      * 
      * @param id
@@ -46,5 +38,13 @@ public interface GroupService {
      * @param dto datos de la entidad
      */
     void save(Long id, GroupEditDto groupEditDto);
+
+    /**
+     * Encuentra un {@link GroupEntity} por su id y lo devuelve
+     * 
+     * @param id
+     * @return GroupEntity
+     */
+    GroupEntity findGroupById(Long id);
 
 }

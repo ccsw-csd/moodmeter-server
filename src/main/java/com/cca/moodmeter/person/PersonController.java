@@ -41,14 +41,4 @@ public class PersonController {
 
         return personEntities.stream().map(e -> mapper.map(e, PersonDto.class)).collect(Collectors.toList());
     }
-
-    /**
-     * Metodo que devuelve la persona que está utilizando la web en la sesión
-     * 
-     * @return PersonEntity
-     */
-    @RequestMapping(path = "/personInWeb", method = RequestMethod.GET)
-    public PersonEntity getPersonInWeb() {
-        return personService.getPersonInWeb();
-    }
 }

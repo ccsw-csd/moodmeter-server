@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cca.moodmeter.group.model.GroupDto;
 import com.cca.moodmeter.group.model.GroupEditDto;
 import com.cca.moodmeter.group.model.GroupEntity;
+import com.cca.moodmeter.group.service.GroupService;
 import com.cca.moodmeter.person.PersonService;
-import com.cca.moodmeter.person.model.PersonDto;
-import com.cca.moodmeter.person.model.PersonEntity;
 
 /**
  * @author mguaitav
@@ -62,22 +61,6 @@ public class GroupController {
     public void delete(@PathVariable("id") Long id) throws Exception {
 
         this.groupService.delete(id);
-    }
-
-    /**
-     * Método para encontrar usuarios cuyo nombre, apellido o username tenga el
-     * parámetro de filtrado
-     * 
-     * @param matchUsernameNameLastname
-     * @return Lista de PersonDto
-     */
-    @RequestMapping(path = "/people/{matchUsernameNameLastname}", method = RequestMethod.GET)
-    public List<PersonDto> findByFilter(
-            @PathVariable(name = "matchUsernameNameLastname") String matchUsernameNameLastname) {
-
-        List<PersonEntity> personEntities = this.personService.findByFilter(matchUsernameNameLastname);
-
-        return personEntities.stream().map(e -> mapper.map(e, PersonDto.class)).collect(Collectors.toList());
     }
 
     /**

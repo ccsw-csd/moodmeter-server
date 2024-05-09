@@ -1,18 +1,21 @@
-package com.cca.moodmeter.group;
+package com.cca.moodmeter.group.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cca.moodmeter.config.security.UserUtils;
+import com.cca.moodmeter.group.database.GroupRepository;
+import com.cca.moodmeter.group.model.GroupDto;
 import com.cca.moodmeter.group.model.GroupEditDto;
 import com.cca.moodmeter.group.model.GroupEntity;
-import com.cca.moodmeter.groupAdmin.GroupAdminService;
-import com.cca.moodmeter.groupStaff.GroupStaffService;
 import com.cca.moodmeter.person.PersonService;
+import com.cca.moodmeter.person.model.PersonDto;
 import com.cca.moodmeter.person.model.PersonEntity;
 
 /**
@@ -57,30 +60,37 @@ public class GroupServiceImpl implements GroupService {
         this.groupRepository.deleteById(id);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<PersonEntity> searchByNameLastnameUsername(String nameLastnameUsername) throws Exception {
-
-        return (List<PersonEntity>) personService.findByFilter(nameLastnameUsername);
-    }
-
     public GroupEditDto findGroupEdit(Long id) {
         GroupEditDto groupEdit = new GroupEditDto();
 
         GroupEntity group;
-        List<PersonEntity> collaborators;
+        List<PersonEntity> members;
         List<PersonEntity> admins;
 
+        GroupDto groupDto = new GroupDto();
+        List<PersonDto> membersDto = new ArrayList<>();
+        List<PersonDto> adminsDto = new ArrayList<>();
+
         group = this.groupRepository.findById(id).orElse(null);
+        BeanUtils.copyProperties(group, groupDto);
+
+        members = groupStaffService.findAllMembersInGroup(group.getId());
+        for (PersonEntity member : members) {
+            PersonDto memberDto = new PersonDto();
+            BeanUtils.copyProperties(member, memberDto);
+            membersDto.add(memberDto);
+        }
 
         admins = groupAdminService.findAllAdminsInGroup(id);
-        collaborators = groupStaffService.findAllMembersInGroup(id);
+        for (PersonEntity admin : admins) {
+            PersonDto adminDto = new PersonDto();
+            BeanUtils.copyProperties(admin, adminDto);
+            adminsDto.add(adminDto);
+        }
 
-        groupEdit.setGroup(group);
-        groupEdit.setCollaborators(collaborators);
-        groupEdit.setAdmin(admins);
+        groupEdit.setGroup(groupDto);
+        groupEdit.setCollaborators(membersDto);
+        groupEdit.setAdmin(adminsDto);
 
         return groupEdit;
     }
@@ -112,11 +122,19 @@ public class GroupServiceImpl implements GroupService {
         this.groupRepository.save(group);
 
         if (!isGroupNew) {
-            groupAdminService.deleteAllAdminsInGroup(group.getId());
-            groupStaffService.deleteAllMembersInGroup(group.getId());
+            groupAdminService.deleteAllAdminsInGroup(group);
+            groupStaffService.deleteAllMembersInGroup(group);
         }
         groupAdminService.addAllAdminsInGroup(group.getId(), groupEditDto.getAdmins());
         groupStaffService.addAllMembersInGroup(group.getId(), groupEditDto.getCollaborators());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GroupEntity findGroupById(Long id) {
+        return groupRepository.findById(id).orElse(null);
     }
 
 }

@@ -1,7 +1,9 @@
-package com.cca.moodmeter.groupAdmin;
+package com.cca.moodmeter.group.service;
 
 import java.util.List;
 
+import com.cca.moodmeter.group.model.GroupEntity;
+import com.cca.moodmeter.person.model.PersonDto;
 import com.cca.moodmeter.person.model.PersonEntity;
 
 public interface GroupAdminService {
@@ -18,9 +20,9 @@ public interface GroupAdminService {
     /**
      * Elimina todos los administradores del grupo cuyo id se pasa como parámetro
      * 
-     * @param id
+     * @param group
      */
-    public void deleteAllAdminsInGroup(Long id);
+    public void deleteAllAdminsInGroup(GroupEntity group);
 
     /**
      * Añade las {@ PersonEntity} que haya en la lista como administradores del
@@ -29,6 +31,6 @@ public interface GroupAdminService {
      * @param id
      * @param admins
      */
-    public void addAllAdminsInGroup(Long id, List<PersonEntity> admins);
+    public void addAllAdminsInGroup(Long id, List<PersonDto> admins);
 
 }
