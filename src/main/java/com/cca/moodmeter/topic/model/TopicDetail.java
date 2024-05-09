@@ -10,6 +10,8 @@ public class TopicDetail {
 
     private List<GroupDto> groups;
 
+    private List<TopicAdminDto> admins;
+
     public TopicDto getTopic() {
         return topic;
     }
@@ -24,6 +26,14 @@ public class TopicDetail {
 
     public void setGroups(List<GroupDto> groups) {
         this.groups = groups;
+    }
+
+    public List<TopicAdminDto> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(List<TopicAdminDto> admins) {
+        this.admins = admins;
     }
 
 }
