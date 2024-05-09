@@ -21,6 +21,8 @@ public class PersonServiceImpl implements PersonService {
      */
     public PersonEntity getPersonByName(String username) {
         return personRepository.getByUsernameLike(username);
+    }
+
     @Override
     public List<PersonEntity> findByFilter(String filter) {
         return this.personRepository.findUsersLikeFilter(filter, PageRequest.of(0, 15));
