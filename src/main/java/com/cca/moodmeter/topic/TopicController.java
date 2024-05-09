@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cca.moodmeter.group.model.GroupDto;
+import com.cca.moodmeter.topic.model.TopicAdminDto;
 import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
@@ -26,6 +27,9 @@ public class TopicController {
 
     @Autowired
     private TopicGroupService topicGroupService;
+
+    @Autowired
+    private TopicAdminService topicAdminService;
 
     @Autowired
     ModelMapper mapper;
@@ -48,9 +52,12 @@ public class TopicController {
             List<GroupDto> groups = topicGroups.stream()
                     .map(topicGroup -> mapper.map(topicGroup.getGroup(), GroupDto.class)).collect(Collectors.toList());
 
+            List<TopicAdminDto> admins = this.topicAdminService.findAdmins(topic.getId()).stream()
+                    .map(admin -> mapper.map(admin, TopicAdminDto.class)).collect(Collectors.toList());
             TopicDetail topicDetail = new TopicDetail();
             topicDetail.setGroups(groups);
             topicDetail.setTopic(mapper.map(topic, TopicDto.class));
+            topicDetail.setAdmins(admins);
 
             topicDetailList.add(topicDetail);
         }

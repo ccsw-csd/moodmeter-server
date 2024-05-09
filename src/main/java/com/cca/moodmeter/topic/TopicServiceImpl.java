@@ -14,6 +14,8 @@ import com.cca.moodmeter.group.model.GroupDto;
 import com.cca.moodmeter.group.model.GroupEntity;
 import com.cca.moodmeter.person.PersonRepository;
 import com.cca.moodmeter.person.model.PersonEntity;
+import com.cca.moodmeter.topic.model.TopicAdminDto;
+import com.cca.moodmeter.topic.model.TopicAdminEntity;
 import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
@@ -44,6 +46,9 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     TopicOptionRepository topicOptionRepository;
+
+    @Autowired
+    TopicAdminRepository topicAdminRepository;
 
     @Autowired
     ModelMapper mapper;
@@ -97,6 +102,19 @@ public class TopicServiceImpl implements TopicService {
                 }
             }
             topic.setQuestions(setList);
+        }
+
+        this.topicAdminRepository.deleteByTopicId(data.getTopic().getId());
+
+        if (data.getAdmins() != null) {
+            List<TopicAdminDto> admins = data.getAdmins();
+            for (TopicAdminDto admin : admins) {
+                TopicAdminEntity topicAdmin = new TopicAdminEntity();
+                topicAdmin.setTopic(topic);
+                topicAdmin.setPerson(mapper.map(admin.getPerson(), PersonEntity.class));
+
+                this.topicAdminRepository.save(topicAdmin);
+            }
         }
 
         return this.topicRepository.save(topic);
