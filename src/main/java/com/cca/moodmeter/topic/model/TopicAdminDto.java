@@ -1,15 +1,14 @@
-package com.cca.moodmeter.topicgroup.model;
+package com.cca.moodmeter.topic.model;
 
-import com.cca.moodmeter.group.model.GroupDto;
-import com.cca.moodmeter.topic.model.TopicDto;
+import com.cca.moodmeter.person.model.PersonDto;
 
-public class TopicGroupDto {
+public class TopicAdminDto {
 
     private Long id;
 
     private TopicDto topic;
 
-    private GroupDto group;
+    private PersonDto person;
 
     public Long getId() {
         return id;
@@ -27,12 +26,12 @@ public class TopicGroupDto {
         this.topic = topic;
     }
 
-    public GroupDto getGroup() {
-        return group;
+    public PersonDto getPerson() {
+        return person;
     }
 
-    public void setGroup(GroupDto group) {
-        this.group = group;
+    public void setPerson(PersonDto person) {
+        this.person = person;
     }
 
 }

@@ -1,7 +1,6 @@
-package com.cca.moodmeter.topicgroup.model;
+package com.cca.moodmeter.topic.model;
 
-import com.cca.moodmeter.group.model.GroupEntity;
-import com.cca.moodmeter.topic.model.TopicEntity;
+import com.cca.moodmeter.person.model.PersonEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,8 +13,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "`topic_group`")
-public class TopicGroupEntity {
+@Table(name = "`topic_admin`")
+public class TopicAdminEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +26,8 @@ public class TopicGroupEntity {
     private TopicEntity topic;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
-    private GroupEntity group;
+    @JoinColumn(name = "person_id")
+    private PersonEntity person;
 
     public Long getId() {
         return id;
@@ -46,12 +45,12 @@ public class TopicGroupEntity {
         this.topic = topic;
     }
 
-    public GroupEntity getGroup() {
-        return group;
+    public PersonEntity getPerson() {
+        return person;
     }
 
-    public void setGroup(GroupEntity group) {
-        this.group = group;
+    public void setPerson(PersonEntity person) {
+        this.person = person;
     }
 
 }

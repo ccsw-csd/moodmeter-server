@@ -23,6 +23,9 @@ public class PersonEntity {
     @Column(name = "username", nullable = false)
     private String username;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -65,18 +68,34 @@ public class PersonEntity {
     }
 
     /**
-     * 
-     * @return name
+     * @return email
      */
-    public String getName() {
-        return name;
+    public String getEmail() {
+
+        return this.email;
     }
 
     /**
-     * 
-     * @param name new value of {@link #getName}.
+     * @param email new value of {@link #getemail}.
+     */
+    public void setEmail(String email) {
+
+        this.email = email;
+    }
+
+    /**
+     * @return name
+     */
+    public String getName() {
+
+        return this.name;
+    }
+
+    /**
+     * @param name new value of {@link #getname}.
      */
     public void setName(String name) {
+
         this.name = name;
     }
 
