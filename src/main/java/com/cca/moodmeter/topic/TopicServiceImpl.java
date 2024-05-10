@@ -1,11 +1,13 @@
 package com.cca.moodmeter.topic;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,9 +55,24 @@ public class TopicServiceImpl implements TopicService {
     @Autowired
     ModelMapper mapper;
 
+    @Value("${app.code}")
+    private String appCode;
+
     @Override
-    public List<TopicEntity> findAll() {
-        return (List<TopicEntity>) this.topicRepository.findAll();
+    public List<TopicEntity> findAll(boolean adminView) {
+        if (adminView && UserUtils.isGranted(appCode, "ADMIN")) {
+            return (List<TopicEntity>) this.topicRepository.findAll();
+        } else {
+            String user = UserUtils.getUserDetails().getUsername();
+            PersonEntity person = personRepository.findByUsernameAndActiveTrue(user);
+            List<TopicAdminEntity> topicAdminList = topicAdminRepository.findAllByPerson(person);
+            List<TopicEntity> topics = new ArrayList<>();
+            for (TopicAdminEntity topicAdmin : topicAdminList) {
+                topics.add(topicAdmin.getTopic());
+            }
+
+            return topics;
+        }
     }
 
     @Override
