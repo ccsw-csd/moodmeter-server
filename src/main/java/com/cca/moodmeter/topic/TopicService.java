@@ -13,7 +13,7 @@ public interface TopicService {
      *
      * @return {@link List} de {@link TopicEntity}
      */
-    List<TopicEntity> findAll();
+    List<TopicEntity> findAll(boolean adminView);
 
     TopicEntity save(TopicDetail data);
 
