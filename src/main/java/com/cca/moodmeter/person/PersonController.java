@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,10 +22,10 @@ public class PersonController {
     @Autowired
     ModelMapper mapper;
 
-    @RequestMapping(path = "/filter", method = RequestMethod.POST)
-    public List<PersonDto> findByFilter(@RequestBody String filter) {
+    @RequestMapping(path = "/filter/{query}", method = RequestMethod.GET)
+    public List<PersonDto> findByFilter(@PathVariable String query) {
 
-        return this.personService.findByFilter(filter).stream().map(user -> mapper.map(user, PersonDto.class))
+        return this.personService.findByFilter(query).stream().map(user -> mapper.map(user, PersonDto.class))
                 .collect(Collectors.toList());
 
     }

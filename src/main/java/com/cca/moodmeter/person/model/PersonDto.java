@@ -4,6 +4,7 @@ public class PersonDto {
 
     private Long id;
     private String username;
+    private String email;
     private String name;
     private String lastname;
     private Boolean active;
@@ -38,6 +39,14 @@ public class PersonDto {
      */
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**

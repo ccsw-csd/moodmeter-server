@@ -143,7 +143,7 @@ public class TopicServiceImpl implements TopicService {
 
         if (data.getStatus() == 1) {
             String user = UserUtils.getUserDetails().getUsername();
-            PersonEntity person = personRepository.getByUsernameLike(user);
+            PersonEntity person = personRepository.findByUsernameAndActiveTrue(user);
             Long personId = person.getId();
 
             boolean hasVoted = topicVotedByRepository.existsByTopicIdAndPersonId(data.getId(), personId);

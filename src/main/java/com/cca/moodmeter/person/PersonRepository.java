@@ -15,4 +15,6 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     PersonEntity getByUsernameLike(String username);
 
+    PersonEntity findByUsernameAndActiveTrue(String username);
+
 }

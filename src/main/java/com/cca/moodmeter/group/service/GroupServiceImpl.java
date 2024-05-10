@@ -3,7 +3,9 @@ package com.cca.moodmeter.group.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     GroupStaffService groupStaffService;
+
+    @Autowired
+    ModelMapper mapper;
 
     /**
      * {@inheritDoc}
@@ -75,18 +80,10 @@ public class GroupServiceImpl implements GroupService {
         BeanUtils.copyProperties(group, groupDto);
 
         members = groupStaffService.findAllMembersInGroup(group.getId());
-        for (PersonEntity member : members) {
-            PersonDto memberDto = new PersonDto();
-            BeanUtils.copyProperties(member, memberDto);
-            membersDto.add(memberDto);
-        }
+        membersDto = members.stream().map(member -> mapper.map(member, PersonDto.class)).collect(Collectors.toList());
 
         admins = groupAdminService.findAllAdminsInGroup(id);
-        for (PersonEntity admin : admins) {
-            PersonDto adminDto = new PersonDto();
-            BeanUtils.copyProperties(admin, adminDto);
-            adminsDto.add(adminDto);
-        }
+        adminsDto = admins.stream().map(admin -> mapper.map(admin, PersonDto.class)).collect(Collectors.toList());
 
         groupEdit.setGroup(groupDto);
         groupEdit.setCollaborators(membersDto);

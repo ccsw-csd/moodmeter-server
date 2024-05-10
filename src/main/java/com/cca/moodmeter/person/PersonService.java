@@ -20,6 +20,6 @@ public interface PersonService {
      * @param username
      * @return
      */
-    public PersonEntity getPersonByName(String username);
+    public PersonEntity getPersonByUsername(String username);
 
 }

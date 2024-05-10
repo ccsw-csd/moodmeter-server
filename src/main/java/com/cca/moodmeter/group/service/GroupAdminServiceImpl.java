@@ -58,7 +58,7 @@ public class GroupAdminServiceImpl implements GroupAdminService {
             groupAdminEntity.setGroup(group);
             PersonEntity person = new PersonEntity();
             if (admin.getId() == null) {
-                person = personService.getPersonByName(admin.getUsername());
+                person = personService.getPersonByUsername(admin.getUsername());
             } else {
                 BeanUtils.copyProperties(admin, person);
             }

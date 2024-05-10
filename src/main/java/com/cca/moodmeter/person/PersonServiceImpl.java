@@ -19,7 +19,7 @@ public class PersonServiceImpl implements PersonService {
     /**
      * {@inheritDoc}
      */
-    public PersonEntity getPersonByName(String username) {
+    public PersonEntity getPersonByUsername(String username) {
         return personRepository.getByUsernameLike(username);
     }
 
