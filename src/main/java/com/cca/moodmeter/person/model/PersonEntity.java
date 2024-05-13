@@ -7,13 +7,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * @author mguaitav
+ * 
+ */
 @Entity
 @Table(name = "all_person", catalog = "personal")
 public class PersonEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "username", nullable = false)
     private String username;
@@ -28,37 +33,37 @@ public class PersonEntity {
     private String lastname;
 
     @Column(name = "active", nullable = false)
-    private Integer active;
+    private Boolean active;
 
     /**
+     * 
      * @return id
      */
-    public Integer getId() {
-
-        return this.id;
+    public Long getId() {
+        return id;
     }
 
     /**
-     * @param id new value of {@link #getid}.
+     * 
+     * @param id new value of {@link #getId}.
      */
-    public void setId(Integer id) {
-
+    public void setId(Long id) {
         this.id = id;
     }
 
     /**
+     * 
      * @return username
      */
     public String getUsername() {
-
-        return this.username;
+        return username;
     }
 
     /**
-     * @param username new value of {@link #getusername}.
+     * 
+     * @param username new value of {@link #getUsername}.
      */
     public void setUsername(String username) {
-
         this.username = username;
     }
 
@@ -95,35 +100,34 @@ public class PersonEntity {
     }
 
     /**
+     * 
      * @return lastname
      */
     public String getLastname() {
-
-        return this.lastname;
+        return lastname;
     }
 
     /**
-     * @param lastname new value of {@link #getlastname}.
+     * 
+     * @param lastname new value of {@link #getLastname}.
      */
     public void setLastname(String lastname) {
-
         this.lastname = lastname;
     }
 
     /**
+     * 
      * @return active
      */
-    public Integer getActive() {
-
-        return this.active;
+    public Boolean getActive() {
+        return active;
     }
 
     /**
-     * @param active new value of {@link #getactive}.
+     * 
+     * @param active new value of {@link #getActive}.
      */
-    public void setActive(Integer active) {
-
+    public void setActive(Boolean active) {
         this.active = active;
     }
-
 }
