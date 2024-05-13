@@ -1,4 +1,4 @@
-package com.cca.moodmeter.group;
+package com.cca.moodmeter.group.database;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;

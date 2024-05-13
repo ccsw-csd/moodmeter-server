@@ -2,30 +2,41 @@ package com.cca.moodmeter.person.model;
 
 public class PersonDto {
 
-    private Integer id;
-
+    private Long id;
     private String username;
-
     private String email;
-
     private String name;
-
     private String lastname;
+    private Boolean active;
 
-    private Integer active;
-
-    public Integer getId() {
+    /**
+     * 
+     * @return id
+     */
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    /**
+     * 
+     * @param id new value of {@link #getId()}.
+     */
+    public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * 
+     * @return username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * 
+     * @param username new value of {@link #getUsername()}.
+     */
     public void setUsername(String username) {
         this.username = username;
     }
@@ -38,27 +49,51 @@ public class PersonDto {
         this.email = email;
     }
 
+    /**
+     * 
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * 
+     * @param name new value of {@link #getName()}.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * 
+     * @return lastname
+     */
     public String getLastname() {
         return lastname;
     }
 
+    /**
+     * 
+     * @param lastname new value of {@link #getLastname()}.
+     */
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
 
-    public Integer getActive() {
+    /**
+     * 
+     * @return active
+     */
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(Integer active) {
+    /**
+     * 
+     * @param active new value of {@link #getActive()}.
+     */
+    public void setActive(Boolean active) {
         this.active = active;
     }
 

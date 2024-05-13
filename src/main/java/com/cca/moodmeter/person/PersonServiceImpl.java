@@ -16,6 +16,13 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     PersonRepository personRepository;
 
+    /**
+     * {@inheritDoc}
+     */
+    public PersonEntity getPersonByUsername(String username) {
+        return personRepository.getByUsernameLike(username);
+    }
+
     @Override
     public List<PersonEntity> findByFilter(String filter) {
         return this.personRepository.findUsersLikeFilter(filter, PageRequest.of(0, 15));

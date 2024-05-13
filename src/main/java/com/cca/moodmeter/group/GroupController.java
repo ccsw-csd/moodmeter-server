@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cca.moodmeter.group.model.GroupDto;
+import com.cca.moodmeter.group.model.GroupEditDto;
 import com.cca.moodmeter.group.model.GroupEntity;
+import com.cca.moodmeter.group.service.GroupService;
+import com.cca.moodmeter.person.PersonService;
 
 /**
  * @author mguaitav
@@ -24,6 +27,9 @@ public class GroupController {
 
     @Autowired
     GroupService groupService;
+
+    @Autowired
+    PersonService personService;
 
     @Autowired
     ModelMapper mapper;
@@ -47,18 +53,6 @@ public class GroupController {
     }
 
     /**
-     * Método para crear o actualizar un grupo
-     *
-     * @param id  PK de la entidad
-     * @param dto datos de la entidad
-     */
-    @RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT)
-    public void save(@PathVariable(name = "id", required = false) Long id, @RequestBody GroupDto dto) {
-
-        this.groupService.save(id, dto);
-    }
-
-    /**
      * Método para borrar un grupo
      *
      * @param id PK de la entidad
@@ -67,6 +61,31 @@ public class GroupController {
     public void delete(@PathVariable("id") Long id) throws Exception {
 
         this.groupService.delete(id);
+    }
+
+    /**
+     * Método para encontrar un GroupDto, con su Group, sus miembros y sus admin
+     * 
+     * @param id id del Group
+     * @return GroupEditDto
+     */
+    @RequestMapping(path = "/{groupId}", method = RequestMethod.GET)
+    public GroupEditDto findGroupEditDto(@PathVariable(name = "groupId") Long id) {
+        GroupEditDto group = this.groupService.findGroupEdit(id);
+
+        return group;
+    }
+
+    /**
+     * Método para guardar o editar un grupo, con sus admins y su personal
+     * 
+     * @param id           id del Group
+     * @param GroupEditDto
+     */
+    @RequestMapping(path = { "", "/{groupId}" }, method = RequestMethod.PUT)
+    public void save(@PathVariable(name = "groupId", required = false) Long id,
+            @RequestBody GroupEditDto groupEditDto) {
+        this.groupService.save(id, groupEditDto);
     }
 
 }

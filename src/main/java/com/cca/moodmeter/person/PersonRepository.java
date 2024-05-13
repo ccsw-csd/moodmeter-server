@@ -10,8 +10,11 @@ import com.cca.moodmeter.person.model.PersonEntity;
 
 public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
-    PersonEntity findByUsernameAndActiveTrue(String username);
-
     @Query("select u from PersonEntity u where concat(name, ' ', lastname, ' ', username) LIKE %:filter% order by name, lastname asc")
     List<PersonEntity> findUsersLikeFilter(String filter, Pageable pageable);
+
+    PersonEntity getByUsernameLike(String username);
+
+    PersonEntity findByUsernameAndActiveTrue(String username);
+
 }
