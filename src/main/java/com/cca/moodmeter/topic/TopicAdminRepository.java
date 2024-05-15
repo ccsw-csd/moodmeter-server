@@ -15,4 +15,6 @@ public interface TopicAdminRepository extends CrudRepository<TopicAdminEntity, L
 
     List<TopicAdminEntity> findAllByPerson(PersonEntity person);
 
+    boolean existsByPersonIdAndTopicId(Long personId, Long id);
+
 }

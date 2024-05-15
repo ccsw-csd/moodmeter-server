@@ -19,6 +19,7 @@ import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
 import com.cca.moodmeter.topic.model.TopicGroupEntity;
+import com.cca.moodmeter.topic.model.TopicVotedByEntity;
 
 @RequestMapping(value = "/topic")
 @RestController
@@ -31,6 +32,9 @@ public class TopicController {
 
     @Autowired
     private TopicAdminService topicAdminService;
+
+    @Autowired
+    private TopicVotedByService topicVotedByService;
 
     @Autowired
     ModelMapper mapper;
@@ -65,6 +69,41 @@ public class TopicController {
 
         return topicDetailList;
 
+    }
+
+    /**
+     * Método para recuperar todos los topic en los que esté asignado un grupo al
+     * cual pertenece el usuario
+     * 
+     * @return {@link List} de {@link TopicDto}
+     */
+
+    @RequestMapping(path = "/group", method = RequestMethod.GET)
+    public List<TopicDetail> findByGroups() {
+
+        List<TopicDetail> topicDetailList = new ArrayList<>();
+        List<TopicEntity> topics = this.topicService.findByGroups();
+
+        for (TopicEntity topic : topics) {
+            List<TopicGroupEntity> topicGroups = this.topicGroupService.findSelectedGroups(topic.getId());
+
+            List<GroupDto> groups = topicGroups.stream()
+                    .map(topicGroup -> mapper.map(topicGroup.getGroup(), GroupDto.class)).collect(Collectors.toList());
+
+            List<TopicAdminDto> admins = this.topicAdminService.findAdmins(topic.getId()).stream()
+                    .map(admin -> mapper.map(admin, TopicAdminDto.class)).collect(Collectors.toList());
+            TopicDetail topicDetail = new TopicDetail();
+            topicDetail.setGroups(groups);
+            topicDetail.setTopic(mapper.map(topic, TopicDto.class));
+            topicDetail.setAdmins(admins);
+            topicDetail.setVotes(this.topicVotedByService.getVotes(topic));
+            TopicVotedByEntity topicVoted = this.topicVotedByService.findVote(topic.getId());
+            topicDetail.setUserVotingDate(topicVoted.getVotingDate());
+
+            topicDetailList.add(topicDetail);
+        }
+
+        return topicDetailList;
     }
 
     /**

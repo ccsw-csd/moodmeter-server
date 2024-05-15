@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cca.moodmeter.config.security.UserUtils;
+import com.cca.moodmeter.group.database.GroupMemberRepository;
 import com.cca.moodmeter.group.model.GroupDto;
 import com.cca.moodmeter.group.model.GroupEntity;
+import com.cca.moodmeter.group.model.GroupMemberEntity;
 import com.cca.moodmeter.person.PersonRepository;
 import com.cca.moodmeter.person.model.PersonEntity;
 import com.cca.moodmeter.topic.model.TopicAdminDto;
@@ -51,6 +53,9 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     TopicAdminRepository topicAdminRepository;
+
+    @Autowired
+    GroupMemberRepository groupMemberRepository;
 
     @Autowired
     ModelMapper mapper;
@@ -199,6 +204,36 @@ public class TopicServiceImpl implements TopicService {
 
         }
 
+    }
+
+    @Override
+    public List<TopicEntity> findByGroups() {
+        String user = UserUtils.getUserDetails().getUsername();
+        PersonEntity person = personRepository.findByUsernameAndActiveTrue(user);
+        Long personId = person.getId();
+
+        // Busco todos los grupos a los que pertenece el usuario
+        List<GroupMemberEntity> groupMemberList = this.groupMemberRepository.findAllByPersonId(personId);
+
+        List<GroupEntity> groups = new ArrayList<>();
+        for (GroupMemberEntity groupMember : groupMemberList) {
+            groups.add(groupMember.getGroup());
+        }
+
+        // Busco todas las encuestas que tienen asociado algún grupo del usuario
+        List<TopicGroupEntity> topicsGroup = this.topicGroupRepository.findAllByGroupIn(groups);
+
+        List<TopicEntity> topics = new ArrayList<>();
+
+        for (TopicGroupEntity topicGroup : topicsGroup) {
+            if (!topicAdminRepository.existsByPersonIdAndTopicId(personId, topicGroup.getTopic().getId())) {
+                if (!topics.contains(topicGroup.getTopic())) {
+                    topics.add(topicGroup.getTopic());
+                }
+            }
+        }
+
+        return topics;
     }
 
 }

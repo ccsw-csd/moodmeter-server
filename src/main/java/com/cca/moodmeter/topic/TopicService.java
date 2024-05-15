@@ -15,6 +15,8 @@ public interface TopicService {
      */
     List<TopicEntity> findAll(boolean adminView);
 
+    List<TopicEntity> findByGroups();
+
     TopicEntity save(TopicDetail data);
 
     TopicEntity addVisit(Long id);
