@@ -19,6 +19,9 @@ import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
 import com.cca.moodmeter.topic.model.TopicGroupEntity;
+import com.cca.moodmeter.topic.model.TopicSetDto;
+import com.cca.moodmeter.topic.model.TopicSetEntity;
+import com.cca.moodmeter.topic.model.TopicSetSimpleDto;
 import com.cca.moodmeter.topic.model.TopicVotedByEntity;
 
 @RequestMapping(value = "/topic")
@@ -138,6 +141,22 @@ public class TopicController {
     public void vote(@RequestBody TopicDto data) {
 
         this.topicService.saveVote(data);
+
+    }
+
+    /**
+     * Método para recuperar todas las preguntas de una encuesta
+     *
+     * @return {@link List} de {@link TopicSetDto}
+     */
+
+    @RequestMapping(path = "/{topicId}/questions", method = RequestMethod.GET)
+    public List<TopicSetSimpleDto> findQuestions(@PathVariable("topicId") Long topicId) {
+
+        List<TopicSetEntity> questions = this.topicService.findQuestions(topicId);
+
+        return questions.stream().map(question -> mapper.map(question, TopicSetSimpleDto.class))
+                .collect(Collectors.toList());
 
     }
 

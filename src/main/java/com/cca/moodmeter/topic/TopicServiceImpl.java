@@ -49,6 +49,9 @@ public class TopicServiceImpl implements TopicService {
     TopicVotedByRepository topicVotedByRepository;
 
     @Autowired
+    TopicSetRepository topicSetRepository;
+
+    @Autowired
     TopicOptionRepository topicOptionRepository;
 
     @Autowired
@@ -234,6 +237,12 @@ public class TopicServiceImpl implements TopicService {
         }
 
         return topics;
+    }
+
+    @Override
+    public List<TopicSetEntity> findQuestions(Long topicId) {
+        List<TopicSetEntity> questions = this.topicSetRepository.findByTopicId(topicId);
+        return questions;
     }
 
 }
