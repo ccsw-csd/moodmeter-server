@@ -15,6 +15,15 @@ public interface GroupService {
     List<GroupEntity> findAll();
 
     /**
+     * Método para recuperar una lista de grupos. Si el usuario es administrador,
+     * llama a findAll. Si no, devuelve la lista de grupos en los que está adscrito
+     * 
+     * @param isAdmin boolean para saber si el usuario es administador
+     * @return devuelve la lista de GroupEntity
+     */
+    List<GroupEntity> findGroups(boolean isAdmin);
+
+    /**
      * Método para borrar un {@link GroupEditDto}
      *
      * @param id PK de la entidad
