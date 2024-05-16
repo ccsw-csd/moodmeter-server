@@ -36,27 +36,15 @@ public class GroupController {
     ModelMapper mapper;
 
     /**
-     * Método para recuperar una lista de {@link Game}
-     *
-     * @param name              nombre del grupo
-     * @param creation_date     fecha de la creación del grupo
-     * @param creation_username nombre de creador del grupo
-     * @param update_date       fecha de la edición del grupo
-     * @param update_username   nombre de editor del grupo
-     * @return {@link List} de {@link GroupDto}
+     * Método para encontrar los grupos. Si el usuario es administrador, devuelve
+     * todos. Si no lo es, devuelve solo a los que este está adscrito
+     * 
+     * @param isAdmin si el usuario es administrador
+     * @return List de GroupDto
      */
     @RequestMapping(path = "", method = RequestMethod.GET)
-    public List<GroupDto> findAll() {
-        List<GroupEntity> groupEntities = this.groupService.findAll();
-
-        return groupEntities.stream().map(e -> mapper.map(e, GroupDto.class)).collect(Collectors.toList());
-
-    }
-
-    @RequestMapping(path = "/find/{username}", method = RequestMethod.GET)
-    public List<GroupDto> findGroupsByAdminUsername(@PathVariable("username") String username,
-            @RequestParam("isAdmin") boolean isAdmin) {
-        List<GroupEntity> groupEntities = this.groupService.findGroupsByAdminUsername(username, isAdmin);
+    public List<GroupDto> findGroups(@RequestParam(value = "isAdmin", required = false) boolean isAdmin) {
+        List<GroupEntity> groupEntities = this.groupService.findGroups(isAdmin);
         return groupEntities.stream().map(e -> mapper.map(e, GroupDto.class)).collect(Collectors.toList());
     }
 

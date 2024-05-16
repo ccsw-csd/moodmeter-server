@@ -48,22 +48,20 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public List<GroupEntity> findAll() {
-        System.out.println("Ejecutando findAll");
         return (List<GroupEntity>) this.groupRepository.findAll();
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<GroupEntity> findGroupsByAdminUsername(String username, boolean isAdmin) {
-        System.out.println("Ejecutando findGroupsByAdminUsername. isAdmin= " + isAdmin);
-        List<GroupEntity> groups;
+    public List<GroupEntity> findGroups(boolean isAdmin) {
         if (isAdmin == true) {
-            groups = (List<GroupEntity>) groupRepository.findAll();
-        } else {
-            PersonEntity userInSession = personService.getPersonByUsername(UserUtils.getUserDetails().getUsername());
-            groups = groupRepository.getGroupsByAdminId(userInSession.getId());
+            return this.findAll();
         }
+        List<GroupEntity> groups;
+        PersonEntity userInSession = personService.getPersonByUsername(UserUtils.getUserDetails().getUsername());
+        groups = groupRepository.getGroupsByAdminId(userInSession.getId());
+
         return groups;
     }
 
