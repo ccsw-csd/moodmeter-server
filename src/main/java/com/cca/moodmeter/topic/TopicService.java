@@ -5,6 +5,7 @@ import java.util.List;
 import com.cca.moodmeter.topic.model.TopicDetail;
 import com.cca.moodmeter.topic.model.TopicDto;
 import com.cca.moodmeter.topic.model.TopicEntity;
+import com.cca.moodmeter.topic.model.TopicSetEntity;
 
 public interface TopicService {
 
@@ -15,9 +16,13 @@ public interface TopicService {
      */
     List<TopicEntity> findAll(boolean adminView);
 
+    List<TopicEntity> findByGroups();
+
     TopicEntity save(TopicDetail data);
 
     TopicEntity addVisit(Long id);
 
     void saveVote(TopicDto data);
+
+    List<TopicSetEntity> findQuestions(Long topicId);
 }

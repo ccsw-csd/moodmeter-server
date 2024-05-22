@@ -1,5 +1,6 @@
 package com.cca.moodmeter.topic.model;
 
+import java.util.Date;
 import java.util.List;
 
 import com.cca.moodmeter.group.model.GroupDto;
@@ -11,6 +12,10 @@ public class TopicDetail {
     private List<GroupDto> groups;
 
     private List<TopicAdminDto> admins;
+
+    private Integer votes;
+
+    private Date userVotingDate;
 
     public TopicDto getTopic() {
         return topic;
@@ -34,6 +39,22 @@ public class TopicDetail {
 
     public void setAdmins(List<TopicAdminDto> admins) {
         this.admins = admins;
+    }
+
+    public Integer getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Integer votes) {
+        this.votes = votes;
+    }
+
+    public Date getUserVotingDate() {
+        return userVotingDate;
+    }
+
+    public void setUserVotingDate(Date userVotingDate) {
+        this.userVotingDate = userVotingDate;
     }
 
 }
