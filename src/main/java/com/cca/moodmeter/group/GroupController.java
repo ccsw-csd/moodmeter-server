@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cca.moodmeter.group.model.GroupDto;
@@ -35,21 +36,16 @@ public class GroupController {
     ModelMapper mapper;
 
     /**
-     * Método para recuperar una lista de {@link Game}
-     *
-     * @param name              nombre del grupo
-     * @param creation_date     fecha de la creación del grupo
-     * @param creation_username nombre de creador del grupo
-     * @param update_date       fecha de la edición del grupo
-     * @param update_username   nombre de editor del grupo
-     * @return {@link List} de {@link GroupDto}
+     * Método para encontrar los grupos. Si el usuario es administrador, devuelve
+     * todos. Si no lo es, devuelve solo a los que este está adscrito
+     * 
+     * @param isAdmin si el usuario es administrador
+     * @return List de GroupDto
      */
     @RequestMapping(path = "", method = RequestMethod.GET)
-    public List<GroupDto> findAll() {
-        List<GroupEntity> groupEntities = this.groupService.findAll();
-
+    public List<GroupDto> findGroups(@RequestParam(value = "isAdmin", required = false) boolean isAdmin) {
+        List<GroupEntity> groupEntities = this.groupService.findGroups(isAdmin);
         return groupEntities.stream().map(e -> mapper.map(e, GroupDto.class)).collect(Collectors.toList());
-
     }
 
     /**
