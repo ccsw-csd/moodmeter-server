@@ -1,14 +1,13 @@
 package com.cca.moodmeter.group.database;
 
-import java.util.List;
-
+import com.cca.moodmeter.group.model.GroupStaffEntity;
+import com.cca.moodmeter.person.model.PersonEntity;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.cca.moodmeter.group.model.GroupStaffEntity;
-import com.cca.moodmeter.person.model.PersonEntity;
+import java.util.List;
 
 public interface GroupStaffRepository extends CrudRepository<GroupStaffEntity, Long> {
 
@@ -17,4 +16,6 @@ public interface GroupStaffRepository extends CrudRepository<GroupStaffEntity, L
 
     @Modifying
     void deleteAllByGroupId(@Param("groupId") Long groupId);
+
+    List<GroupStaffEntity> findAllByPersonId(Long personId);
 }
