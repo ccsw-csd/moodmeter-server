@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = false)
@@ -54,6 +51,16 @@ public class TopicServiceImpl implements TopicService {
     @Value("${app.code}")
     private String appCode;
 
+    public TopicEntity get(Long id) {
+        Optional<TopicEntity> topicOptional = this.topicRepository.findById(id);
+
+        if (topicOptional.isPresent()) {
+            return topicOptional.get();
+        } else {
+            throw new EntityNotFoundException("Topic with ID " + id + " not found");
+        }
+    }
+
     @Override
     public List<TopicEntity> findAll(boolean adminView) {
         if (adminView && UserUtils.isGranted(appCode, "ADMIN")) {
@@ -73,55 +80,70 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public TopicEntity save(TopicDetail data) {
-        TopicEntity topic = new TopicEntity();
-        topic.setTitle(data.getTopic().getTitle());
-        topic.setStatus(data.getTopic().getStatus());
-        topic.setUpdateDate(data.getTopic().getUpdateDate());
-        topic.setUpdateUsername(UserUtils.getUserDetails().getUsername());
-        topic.setCreationDate(data.getTopic().getCreationDate());
+
+        TopicEntity topic;
 
         if (data.getTopic().getId() != null) {
-            topic.setId(data.getTopic().getId());
-            topic.setCreationUsername(data.getTopic().getCreationUsername());
-            topic.setVisits(data.getTopic().getVisits());
+            topic = get(data.getTopic().getId());
+
+            this.topicGroupRepository.deleteByTopicId(topic.getId());
+            this.topicAdminRepository.deleteByTopicId(topic.getId());
+
         } else {
+            topic = new TopicEntity();
+            topic.setStatus(0);
+            topic.setCreationDate(new Date());
             topic.setCreationUsername(UserUtils.getUserDetails().getUsername());
-            long visits = 0;
-            topic.setVisits(visits);
+            topic.setVisits(0L);
+            Random rand = new Random();
+            topic.setBackground(rand.nextInt(9) + 1);
         }
 
-        this.topicGroupRepository.deleteByTopicId(data.getTopic().getId());
+        topic.setTitle(data.getTopic().getTitle());
+        topic.setStatus(data.getTopic().getStatus());
+        topic.setUpdateDate(new Date());
+        topic.setUpdateUsername(UserUtils.getUserDetails().getUsername());
+        topic.getQuestions().clear();
+
+        if (data.getTopic().getQuestions() != null) {
+            int orderQuestion = 1;
+            for (TopicSetSimpleDto set : data.getTopic().getQuestions()) {
+
+                TopicSetEntity topicSet = mapper.map(set, TopicSetEntity.class);
+
+                topicSet.setTopic(topic);
+                topicSet.setOrder(orderQuestion++);
+
+                int orderOption = 1;
+
+                for (TopicOptionEntity option : topicSet.getOptions()) {
+                    option.setSet(topicSet);
+                    option.setOrder(orderOption++);
+                }
+
+                topic.getQuestions().add(topicSet);
+            }
+        }
+
+        this.topicRepository.save(topic);
 
         if (data.getGroups() != null) {
             List<GroupDto> groups = data.getGroups();
             for (GroupDto group : groups) {
                 TopicGroupEntity topicGroup = new TopicGroupEntity();
-                topicGroup.setTopic(topic);
 
+                topicGroup.setTopic(topic);
                 topicGroup.setGroup(mapper.map(group, GroupEntity.class));
 
                 this.topicGroupRepository.save(topicGroup);
             }
         }
 
-        if (data.getTopic().getQuestions() != null) {
-            List<TopicSetEntity> setList = data.getTopic().getQuestions().stream().map(e -> mapper.map(e, TopicSetEntity.class)).collect(Collectors.toList());
-            for (TopicSetEntity set : setList) {
-                set.setTopic(topic);
-
-                for (TopicOptionEntity option : set.getOptions()) {
-                    option.setSet(set);
-                }
-            }
-            topic.setQuestions(setList);
-        }
-
-        this.topicAdminRepository.deleteByTopicId(data.getTopic().getId());
-
         if (data.getAdmins() != null) {
             List<TopicAdminDto> admins = data.getAdmins();
             for (TopicAdminDto admin : admins) {
                 TopicAdminEntity topicAdmin = new TopicAdminEntity();
+
                 topicAdmin.setTopic(topic);
                 topicAdmin.setPerson(mapper.map(admin.getPerson(), PersonEntity.class));
 
@@ -129,70 +151,96 @@ public class TopicServiceImpl implements TopicService {
             }
         }
 
-        return this.topicRepository.save(topic);
+        return topic;
+    }
+
+    @Override
+    public void launch(Long topicId, Date closeDate) {
+        TopicEntity topic = get(topicId);
+        topic.setStatus(1);
+        topic.setCloseDate(closeDate);
+        this.topicRepository.save(topic);
     }
 
     @Override
     public TopicEntity addVisit(Long id) {
-        Optional<TopicEntity> topicOptional = this.topicRepository.findById(id);
+        TopicEntity topic = get(id);
 
-        if (topicOptional.isPresent()) {
-            TopicEntity topic = topicOptional.get();
-            Long visits = topic.getVisits() + 1;
-            topic.setVisits(visits);
-            try {
-                return this.topicRepository.save(topic);
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to save topic", e);
-            }
-        } else {
-            throw new EntityNotFoundException("Topic with ID " + id + " not found");
+        Long visits = topic.getVisits() + 1;
+        topic.setVisits(visits);
+        try {
+            return this.topicRepository.save(topic);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save topic", e);
         }
+
     }
 
     @Override
-    public void saveVote(TopicDto data) {
+    public void vote(Long idTopic, VoteRequestDto data) {
 
-        if (data.getStatus() == 1) {
-            String user = UserUtils.getUserDetails().getUsername();
-            PersonEntity person = personRepository.findByUsernameAndActiveTrue(user);
-            Long personId = person.getId();
+        Long personId = UserUtils.getUserDetails().getGlobalId();
+        boolean hasVoted = topicVotedByRepository.existsByTopicIdAndPersonId(idTopic, personId);
 
-            boolean hasVoted = topicVotedByRepository.existsByTopicIdAndPersonId(data.getId(), personId);
-            if (!hasVoted) {
-                // Recorro todas las preguntas de la encuesta
-                for (TopicSetSimpleDto question : data.getQuestions()) {
-                    // Recorro las opciones votadas para cada pregunta
-                    for (Long optionId : question.getAnswers()) {
-                        // Recorro las opciones para cada pregunta y sumo uno a los votos que
-                        // correspondan
-                        for (TopicOptionSimpleDto option : question.getOptions()) {
-                            if (option.getId() == optionId) {
-                                // option.setVotes(option.getVotes() + 1);
-                                Optional<TopicOptionEntity> optionOptional = this.topicOptionRepository.findById(optionId);
-                                if (optionOptional.isPresent()) {
-                                    TopicOptionEntity topicOption = optionOptional.get();
-                                    topicOption.setVotes(topicOption.getVotes() + 1);
-                                    this.topicOptionRepository.save(topicOption);
-                                }
-                            }
+        if (hasVoted)
+            return;
+
+        TopicVotedByEntity voted = new TopicVotedByEntity();
+        TopicEntity topic = get(idTopic);
+        PersonEntity person = personRepository.findById(personId).orElseThrow();
+
+        voted.setTopic(topic);
+        voted.setPerson(person);
+        voted.setVotingDate(new Date());
+
+        this.topicVotedByRepository.save(voted);
+
+        List<Long> optionsVoted = extractOptionsVoted(data);
+        optionsVoted.forEach(optionId -> {
+            TopicOptionEntity option = this.topicOptionRepository.findById(optionId).orElseThrow();
+            option.setVotes(option.getVotes() + 1);
+            this.topicOptionRepository.save(option);
+        });
+
+    }
+
+    private static List<Long> extractOptionsVoted(VoteRequestDto data) {
+        List<Long> optionsVoted = new ArrayList<>();
+
+        if (data == null || data.getQuestions() == null || data.getQuestions().isEmpty())
+            return optionsVoted;
+
+        data.getQuestions().forEach(question -> {
+
+            Object answers = question.getAnswers();
+            if (answers != null) {
+
+                if (answers instanceof Integer) {
+                    Integer answer = (Integer) answers;
+                    optionsVoted.add(answer.longValue());
+                }
+
+                if (answers instanceof Long) {
+                    optionsVoted.add((Long) answers);
+                }
+
+                if (answers instanceof List) {
+                    if (((List) answers).size() > 0) {
+
+                        if (((List) answers).get(0) instanceof Integer) {
+                            List<Integer> answersList = (List<Integer>) answers;
+                            optionsVoted.addAll(answersList.stream().map(Long::valueOf).toList());
+                        }
+
+                        if (((List) answers).get(0) instanceof Long) {
+                            List<Long> answersList = (List<Long>) answers;
+                            optionsVoted.addAll(answersList);
                         }
                     }
                 }
-
-                TopicEntity topic = new TopicEntity();
-
-                topic.setId(data.getId());
-
-                TopicVotedByEntity voted = new TopicVotedByEntity();
-                voted.setPerson(person);
-                voted.setTopic(topic);
-                this.topicVotedByRepository.save(voted);
-
             }
-
-        }
-
+        });
+        return optionsVoted;
     }
 
     @Override
@@ -229,6 +277,24 @@ public class TopicServiceImpl implements TopicService {
     public List<TopicSetEntity> findQuestions(Long topicId) {
         List<TopicSetEntity> questions = this.topicSetRepository.findByTopicId(topicId);
         return questions;
+    }
+
+    @Override
+    public List<TopicDashboardItem> findAllByUser() {
+
+        Long personId = UserUtils.getUserDetails().getGlobalId();
+
+        return this.topicRepository.findTopicsByPersonId(personId);
+
+    }
+
+    @Override
+    public TopicDashboardItem getOneItem(Long id) {
+
+        Long personId = UserUtils.getUserDetails().getGlobalId();
+
+        return this.topicRepository.getOneItem(personId, id);
+
     }
 
 }

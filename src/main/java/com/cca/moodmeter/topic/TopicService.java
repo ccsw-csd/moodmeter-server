@@ -1,11 +1,9 @@
 package com.cca.moodmeter.topic;
 
-import java.util.List;
+import com.cca.moodmeter.topic.model.*;
 
-import com.cca.moodmeter.topic.model.TopicDetail;
-import com.cca.moodmeter.topic.model.TopicDto;
-import com.cca.moodmeter.topic.model.TopicEntity;
-import com.cca.moodmeter.topic.model.TopicSetEntity;
+import java.util.Date;
+import java.util.List;
 
 public interface TopicService {
 
@@ -22,7 +20,15 @@ public interface TopicService {
 
     TopicEntity addVisit(Long id);
 
-    void saveVote(TopicDto data);
+    TopicEntity get(Long id);
+
+    void vote(Long id, VoteRequestDto data);
 
     List<TopicSetEntity> findQuestions(Long topicId);
+
+    List<TopicDashboardItem> findAllByUser();
+
+    void launch(Long topicId, Date closeDate);
+
+    TopicDashboardItem getOneItem(Long id);
 }

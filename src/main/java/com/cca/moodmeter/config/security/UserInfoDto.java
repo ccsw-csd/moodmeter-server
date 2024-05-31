@@ -32,6 +32,8 @@ public class UserInfoDto {
 
     private Date expiredDate;
 
+    private Long globalId;
+
     /**
      * @return the role
      */
@@ -203,5 +205,13 @@ public class UserInfoDto {
 
         return authorities;
 
+    }
+
+    public void setGlobalId(Long globalId) {
+        this.globalId = globalId;
+    }
+
+    public Long getGlobalId() {
+        return globalId;
     }
 }

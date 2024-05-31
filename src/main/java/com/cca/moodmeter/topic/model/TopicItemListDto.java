@@ -1,49 +1,29 @@
 package com.cca.moodmeter.topic.model;
 
-import jakarta.persistence.*;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-@Entity
-@Table(name = "`topic`")
-public class TopicEntity {
+public class TopicItemListDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "title")
     private String title;
 
-    @Column(name = "visits")
     private Long visits;
 
-    @Column(name = "status")
     private Integer status;
 
-    @Column(name = "creation_date")
     private Date creationDate;
 
-    @Column(name = "creation_username")
+    private Date closeDate;
     private String creationUsername;
 
-    @Column(name = "update_date")
     private Date updateDate;
 
-    @Column(name = "update_username")
     private String updateUsername;
 
-    @Column(name = "background")
     private Integer background;
 
-    @Column(name = "close_date")
-    private Date closeDate;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "topic", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<TopicSetEntity> questions = new ArrayList<>();
+    private Boolean votedByUser;
 
     public Long getId() {
         return id;
@@ -109,20 +89,20 @@ public class TopicEntity {
         this.status = status;
     }
 
-    public List<TopicSetEntity> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<TopicSetEntity> questions) {
-        this.questions = questions;
-    }
-
     public Integer getBackground() {
         return background;
     }
 
     public void setBackground(Integer background) {
         this.background = background;
+    }
+
+    public Boolean getVotedByUser() {
+        return votedByUser;
+    }
+
+    public void setVotedByUser(Boolean votedByUser) {
+        this.votedByUser = votedByUser;
     }
 
     public Date getCloseDate() {
