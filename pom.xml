@@ -12,7 +12,7 @@
 
     <groupId>com.cca</groupId>
     <artifactId>moodmeter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.2</version>
     <name>moodmeter</name>
     <description>Moodmeter Application</description>
 

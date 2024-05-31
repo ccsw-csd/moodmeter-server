@@ -159,6 +159,9 @@ public class TopicServiceImpl implements TopicService {
         TopicEntity topic = get(topicId);
         topic.setStatus(1);
         topic.setCloseDate(closeDate);
+        topic.setUpdateDate(new Date());
+        topic.setUpdateUsername(UserUtils.getUserDetails().getUsername());
+
         this.topicRepository.save(topic);
     }
 
